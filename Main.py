@@ -1,12 +1,6 @@
 import pygame
+from constants import TIMER, FPS, SCREEN
 pygame.init()
-
-
-WIDTH = 1000
-HEIGHT = 1000
-FPS = 60
-SCREEN = pygame.display.set_mode([WIDTH, HEIGHT])
-TIMER = pygame.time.Clock()
 
 score  = 0
 preyScore = 0
