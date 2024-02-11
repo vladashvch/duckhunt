@@ -60,8 +60,16 @@ class Pray(Object):
 
     def change_direction(self):
         self.flipX = False
-        self.direction =  self.horizontalFlyRow
-        #logic depending on velocity to change direction
+        if self.velocity[0] >= 0 and not (0 <= self.velocity[1] <= self.minVelocity+1): #↑↓ →→
+            self.direction = self.upFlyRow
+        elif self.velocity[0] <= 0 and not (0 <= self.velocity[1] <= self.minVelocity+1): #↑↓ ←←
+            self.direction = self.upFlyRow
+            self.flipX = True
+        elif self.velocity[0] < 0: #←
+            self.direction =  self.horizontalFlyRow
+            self.flipX = True
+        elif self.velocity[0] > 0: #→
+            self.direction = self.horizontalFlyRow
     
     def move(self):
         # Changing the value if speed_x and speed_y both are zero
