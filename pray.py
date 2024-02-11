@@ -2,6 +2,7 @@ import pygame
 from object import Object
 from random import randint
 import random
+from constants import BOUNDS_X, BOUNDS_Y
 class Pray(Object):
     animationFramerate = 12
     minVelocity = 4
@@ -67,14 +68,14 @@ class Pray(Object):
         if self.velocity == [0, 0]:
             self.velocity = [randint(self.minVelocity, self.maxVelocity) * self.direction, randint(self.minVelocity, self.maxVelocity) * self.direction]
         # Changing the direction and x,y coordinate of the object if the coordinate of left side is less..or right side coordinate is greater..
-        if self.x <= 20 or self.x + self.width >= 990:
-            self.move_direction = -1 if self.x + self.width >= 990 else 1
+        if self.x <= BOUNDS_X[0] or self.x + self.width >= BOUNDS_X[1]:
+            self.move_direction = -1 if self.x + self.width >= BOUNDS_X[1] else 1
             self.velocity[0] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
             self.velocity[1] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
         
         # Changing the direction and x,y coordinate of the object if the coordinate of top side is less.. or bottom side coordinate is greater..
-        if self.y <= 20 or self.y + self.height >= 600:
-            self.move_direction = -1 if self.y + self.height >= 600 else 1
+        if self.y <= BOUNDS_Y[0] or self.y + self.height >= BOUNDS_Y[1]:
+            self.move_direction = -1 if self.y + self.height >= BOUNDS_Y[1] else 1
             self.velocity[0] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
             self.velocity[1] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
 
