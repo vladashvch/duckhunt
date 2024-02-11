@@ -5,8 +5,8 @@ pygame.init()
 WIDTH = 1000
 HEIGHT = 1000
 FPS = 60
-screen = pygame.display.set_mode([WIDTH, HEIGHT])
-timer = pygame.time.Clock()
+SCREEN = pygame.display.set_mode([WIDTH, HEIGHT])
+TIMER = pygame.time.Clock()
 
 score  = 0
 preyScore = 0
@@ -42,12 +42,12 @@ def showResult(text, score, preys):
 
     while run:
         # show black rectangle behind text
-        pygame.draw.rect(screen, (0, 0, 0), (250, 150, 500, 225))
+        pygame.draw.rect(SCREEN, (0, 0, 0), (250, 150, 500, 225))
 
         # show text
-        screen.blit(text_render, text_loc)
-        screen.blit(score_render, score_loc)
-        screen.blit(pray_render, pray_loc)
+        SCREEN.blit(text_render, text_loc)
+        SCREEN.blit(score_render, score_loc)
+        SCREEN.blit(pray_render, pray_loc)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 :
@@ -60,39 +60,39 @@ def showGameUi():
     run = True
     
     while run:
-        timer.tick(FPS)
+        TIMER.tick(FPS)
         
         # fill down layer of screen with color
-        screen.fill(pygame.Color('#3FBFFE'))
+        SCREEN.fill(pygame.Color('#3FBFFE'))
         
         # upper layer with grass and ui
-        screen.blit(LAYERBG,(0,0))
+        SCREEN.blit(LAYERBG,(0,0))
         
         # hit ui
-        screen.blit(HIT,(245,845))
+        SCREEN.blit(HIT,(245,845))
         # loop spawning of "alive prey" icons
         preyAliveXPosition = 370
         for _ in range(preyMaxCount): 
-            screen.blit(PREYALIVE, (preyAliveXPosition, 850))
+            SCREEN.blit(PREYALIVE, (preyAliveXPosition, 850))
             preyAliveXPosition += 30 
         
         # score ui
-        screen.blit(SCORE,(800,870))
+        SCREEN.blit(SCORE,(800,870))
         textScore_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 35).render(str(preyScore), True, "White")
         textScore_loc = textScore_render.get_rect(center=(880,850))
-        screen.blit(textScore_render, textScore_loc)
+        SCREEN.blit(textScore_render, textScore_loc)
         
         # bullets count ui
         bullets_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 25).render("R = "+ str(len(bulletsCount)), True, "White")
         bullets__loc = bullets_render.get_rect(center=(135,790))
-        screen.blit(bullets_render, bullets__loc)
+        SCREEN.blit(bullets_render, bullets__loc)
         
         # shot ui
-        screen.blit(SHOT,(85,870))
+        SCREEN.blit(SHOT,(85,870))
         # loop spawning of bullets icons
         bulletXPosition = 90
         for _ in range(bulletsMaxCount):
-            screen.blit(BULLET, (bulletXPosition, 838))
+            SCREEN.blit(BULLET, (bulletXPosition, 838))
             bulletXPosition += 30 
         
         for event in pygame.event.get():
@@ -119,7 +119,7 @@ def startMenu():
                     showGameUi()  
         
         #show start menu bg
-        screen.blit(STARTBG,(0,0))
+        SCREEN.blit(STARTBG,(0,0))
         pygame.display.flip()        
     pygame.quit()     
 
