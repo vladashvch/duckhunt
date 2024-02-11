@@ -1,7 +1,9 @@
 import pygame
-class Object():
+from abc import ABC, abstractmethod
+class Object(ABC):
     gameScreen = None
-
+    
+    @abstractmethod
     def __init__(self, x, y, width, height, image):
         self.x = x
         self.y = y
