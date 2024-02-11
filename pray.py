@@ -1,7 +1,6 @@
 import pygame
 from object import Object
-from random import randint
-import random
+from random import randint, choice
 from constants import BOUNDS_X, BOUNDS_Y
 class Pray(Object):
     alive = True
@@ -10,7 +9,7 @@ class Pray(Object):
     maxVelocity = 8
     horizontalFlyRow = 1 #row in tileset
     upFlyRow = 0
-    randomFall = random.choice([1,2])
+    randomFall = choice([1,2])
 
     def __init__(self, x, y, width, height, tileset, direction=1):
         super().__init__(x, y, width, height, None)
@@ -80,14 +79,14 @@ class Pray(Object):
         # Changing the direction and x,y coordinate of the object if the coordinate of left side is less..or right side coordinate is greater..
         if self.x <= BOUNDS_X[0] or self.x + self.width >= BOUNDS_X[1]:
             self.move_direction = -1 if self.x + self.width >= BOUNDS_X[1] else 1
-            self.velocity[0] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
-            self.velocity[1] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+            self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+            self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
         
         # Changing the direction and x,y coordinate of the object if the coordinate of top side is less.. or bottom side coordinate is greater..
         if self.y <= BOUNDS_Y[0] or self.y + self.height >= BOUNDS_Y[1]:
             self.move_direction = -1 if self.y + self.height >= BOUNDS_Y[1] else 1
-            self.velocity[0] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
-            self.velocity[1] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+            self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+            self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
 
     def dying(self):
         if self.frame_timer < self.animationFramerate*2: # 2 cycles
