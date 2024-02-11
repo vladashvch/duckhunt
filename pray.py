@@ -108,7 +108,11 @@ class Pray(Object):
         self.y += self.velocity[1]
         self.draw()
     
-
+    def start(self):
+        self.velocity = [8, -8]
+        self.x += self.velocity[0]
+        self.y += self.velocity[1]
+        self.draw()
 
 
 
