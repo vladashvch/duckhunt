@@ -1,7 +1,7 @@
 import pygame
-from object import Object
 from random import randint, choice
-from constants import BOUNDS_X, BOUNDS_Y
+from constants import BOUNDS_X, BOUNDS_Y, SCREEN, WIDTH
+from object import Object
 class Pray(Object):
     alive = True
     killPrice = 100
@@ -43,7 +43,7 @@ class Pray(Object):
     def draw(self):
         image = pygame.transform.scale(self.tileset[self.frames[self.frame]][self.direction], (self.width, self.height))
         self.change_direction()
-        self.gameScreen.blit(pygame.transform.flip(image,  self.flipX, False), (self.x, self.y))
+        SCREEN.blit(pygame.transform.flip(image,  self.flipX, False), (self.x, self.y))
 
         if self.velocity[0] == 0 and self.velocity[1] == 0:
             self.frame = 0
@@ -91,16 +91,16 @@ class Pray(Object):
 
     def dying(self):
         if self.frame_timer < self.animationFramerate*2: # 2 cycles
-            self.gameScreen.blit(pygame.transform.scale(self.tileset[0][2], (self.width, self.height)), (self.x, self.y))
+            SCREEN.blit(pygame.transform.scale(self.tileset[0][2], (self.width, self.height)), (self.x, self.y))
             self.frame_timer += 1
             self.y -= 0.5
             return
         
         self.y += 8
-        self.gameScreen.blit(pygame.transform.scale(self.tileset[self.randomFall][2], (self.width, self.height)), (self.x, self.y))
+        SCREEN.blit(pygame.transform.scale(self.tileset[self.randomFall][2], (self.width, self.height)), (self.x, self.y))
 
     def flyAway(self):
-        if self.x > 1000/2:
+        if self.x > WIDTH/2:
             self.velocity = [8, -8]
         else:
             self.velocity = [-8, -8]
