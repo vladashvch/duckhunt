@@ -4,6 +4,7 @@ from random import randint, choice
 from constants import BOUNDS_X, BOUNDS_Y
 class Pray(Object):
     alive = True
+    killPrice = 100
     animationFramerate = 12
     minVelocity = 4
     maxVelocity = 8
