@@ -4,11 +4,13 @@ from random import randint
 import random
 from constants import BOUNDS_X, BOUNDS_Y
 class Pray(Object):
+    alive = True
     animationFramerate = 12
     minVelocity = 4
     maxVelocity = 8
     horizontalFlyRow = 1 #row in tileset
     upFlyRow = 0
+    randomFall = random.choice([1,2])
 
     def __init__(self, x, y, width, height, tileset, direction=1):
         super().__init__(x, y, width, height, None)
@@ -19,12 +21,12 @@ class Pray(Object):
         self.frames = [0, 1, 2, 1]
         self.frame_timer = 0
         self.velocity = [0, 0]
-
+        
     def update(self):
-            self.move()
-            self.x += self.velocity[0]
-            self.y += self.velocity[1]
-            self.draw()
+        self.move()
+        self.x += self.velocity[0]
+        self.y += self.velocity[1]
+        self.draw()
 
     def load_tileset(self, filename, width, height):
         image = pygame.image.load(filename).convert_alpha()
@@ -86,6 +88,18 @@ class Pray(Object):
             self.move_direction = -1 if self.y + self.height >= BOUNDS_Y[1] else 1
             self.velocity[0] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
             self.velocity[1] = random.choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+
+    def dying(self):
+        if self.frame_timer < self.animationFramerate*2: # 2 cycles
+            self.gameScreen.blit(pygame.transform.scale(self.tileset[0][2], (self.width, self.height)), (self.x, self.y))
+            self.frame_timer += 1
+            self.y -= 0.5
+            return
+        
+        self.y += 8
+        self.gameScreen.blit(pygame.transform.scale(self.tileset[self.randomFall][2], (self.width, self.height)), (self.x, self.y))
+
+
 
 
 
