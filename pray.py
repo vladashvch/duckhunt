@@ -99,6 +99,19 @@ class Pray(Object):
         self.y += 8
         self.gameScreen.blit(pygame.transform.scale(self.tileset[self.randomFall][2], (self.width, self.height)), (self.x, self.y))
 
+    def flyAway(self):
+        if self.x > 1000/2:
+            self.velocity = [8, -8]
+        else:
+            self.velocity = [-8, -8]
+        self.x += self.velocity[0]
+        self.y += self.velocity[1]
+        self.draw()
+    
+
+
+
+
 
 
 
