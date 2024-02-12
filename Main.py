@@ -1,6 +1,8 @@
 import pygame
 from constants import TIMER, FPS, SCREEN
 from cursor import Cursor
+from pray import Pray
+from random import randint
 
 pygame.init()
 
@@ -24,34 +26,13 @@ PREYALIVE = pygame.image.load("assets/preyalive.png")
 SHOT = pygame.image.load("assets/shot.png")
 BULLET = pygame.image.load("assets/bullet.png")
 SCORE =  pygame.image.load("assets/score.png")
+
+                            
 targetCursor = Cursor(0, 0, 50, 50, pygame.image.load("assets/cursor.png")) 
-
-def showResult(text, score, preys):
-    run = True
-    text_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render(text, True, "White")
-    score_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Score: " + str(score), True, "White")
-    pray_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
+for _ in range(preyMaxCount):
+    goose = Pray(-50, randint(200, 550), 154, 145, "images/goose_tileset.png")
+    preyCount.append(goose)
     
-    text_loc = text_render.get_rect(center=(500, 200))
-    score_loc = score_render.get_rect(center=(500, 250))
-    pray_loc = pray_render.get_rect(center=(500, 300))
-
-    while run:
-        # show black rectangle behind text
-        pygame.draw.rect(SCREEN, (0, 0, 0), (250, 150, 500, 225))
-
-        # show text
-        SCREEN.blit(text_render, text_loc)
-        SCREEN.blit(score_render, score_loc)
-        SCREEN.blit(pray_render, pray_loc)
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 :
-                run = False
-        pygame.display.flip()
-    pygame.quit()                                
-
-
 def showGameUi():
     run = True
     
@@ -69,6 +50,8 @@ def showGameUi():
         targetCursor.draw() 
         targetCursor.x = mousePos[0] - targetCursor.width / 2
         targetCursor.y = mousePos[1] - targetCursor.height / 2
+        
+        
         
         # hit ui
         SCREEN.blit(HIT,(245,845))
@@ -109,7 +92,31 @@ def showGameUi():
         pygame.display.flip()        
     pygame.quit()     
 
+def showResult(text, score, preys):
+    run = True
+    text_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render(text, True, "White")
+    score_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Score: " + str(score), True, "White")
+    pray_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
+    
+    text_loc = text_render.get_rect(center=(500, 200))
+    score_loc = score_render.get_rect(center=(500, 250))
+    pray_loc = pray_render.get_rect(center=(500, 300))
 
+    while run:
+        # show black rectangle behind text
+        pygame.draw.rect(SCREEN, (0, 0, 0), (250, 150, 500, 225))
+
+        # show text
+        SCREEN.blit(text_render, text_loc)
+        SCREEN.blit(score_render, score_loc)
+        SCREEN.blit(pray_render, pray_loc)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 :
+                run = False
+        pygame.display.flip()
+    pygame.quit()
+    
 def startMenu():
     run = True
     
