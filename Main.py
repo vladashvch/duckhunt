@@ -1,5 +1,5 @@
 import pygame
-from constants import TIMER, FPS, SCREEN, KILLRADIUS
+from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH
 from cursor import Cursor
 from pray import Pray
 from random import randint
@@ -13,6 +13,7 @@ preyCount = []
 preyMaxCount = 10
 bulletsCount = 3
 bulletsMaxCount = 3
+winPreyCount = 8
 
 pygame.display.set_caption("DuckHunt")
 
@@ -49,10 +50,10 @@ def showGameUi():
     
     while run:
         TIMER.tick(FPS)
-        current_time = pygame.time.get_ticks()
-
-        score  = 0
-        preyScore = 0
+        global bulletsCount
+        global bulletsMaxCount  
+        global score  
+        global preyScore 
         # fill down layer of screen with color
         SCREEN.fill(pygame.Color('#3FBFFE'))
         
@@ -73,11 +74,8 @@ def showGameUi():
                 if goose.x < 20:
                     goose.start()
                 else:
-                    goose.update()
+                    goose.update()        
             else:
-                # goose.flyAway()
-                # if goose.y < -goose.width or goose.x > WIDTH + goose.width:
-                #     preyCount.remove(goose)
                 goose.dying()
                 if goose.y > 700:
                     preyCount.remove(goose)
@@ -92,10 +90,11 @@ def showGameUi():
         
         # score ui
         SCREEN.blit(SCORE,(800,870))
+        textScore_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 35).render(str(score), True, "White")
+        textScore_loc = textScore_render.get_rect(center=(880,850))
+        SCREEN.blit(textScore_render, textScore_loc)
         
-        
-        global bulletsCount
-        global bulletsMaxCount  
+
         SCREEN.blit(SHOT,(85,870))
         bulletXPosition = 90
         for _ in range(bulletsCount):
@@ -110,28 +109,35 @@ def showGameUi():
         
         killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS)  
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                bulletsCount -= 1
+            if preyCount == preyMaxCount and preyCount == winPreyCount:
+                showResult(" You win! ", score, preyScore)
                 
-                if killCollision:
-                    goose.alive = False
-                    score += goose.killPrice
-                    preyScore += 1
-                    bulletsCount = bulletsMaxCount 
-                
-                if bulletsCount <= 0:
-                    bulletsCount = bulletsMaxCount
-                     
-                 
-            
-            
-            # # show result depends on preyScore
-            # if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            #         showResult(" You win! ", score, preyScore)
-            # elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            #         showResult(" Oh no... You lose! ", score, preyScore)          
+            elif preyCount == preyMaxCount and preyCount != winPreyCount:
+                    showResult(" Oh no... You lose! ", score, preyScore)  
+                    
+            else:
+                if event.type == pygame.QUIT:
+                    run = False
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    bulletsCount -= 1
+                    
+                    if killCollision:
+                        goose.alive = False
+                        score += goose.killPrice
+                        preyScore += 1
+                        bulletsCount = bulletsMaxCount 
+                    
+                    if bulletsCount <= 0:
+                        goose.flyAway()
+                        if goose.y < -goose.width or goose.x > WIDTH + goose.width:
+                            preyCount.remove(goose)
+                            
+                        pygame.time.delay(200)
+                          
+                        bulletsCount = bulletsMaxCount
+                        
+                        
+                   
         pygame.display.flip()        
     pygame.quit()     
 
