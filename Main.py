@@ -43,7 +43,7 @@ def checkKillCollision(prey, targetCursor, radius):
 
     return distance <= radius
 
-
+last_score = 0
 
  
 def showGameUi():
@@ -79,6 +79,7 @@ def showGameUi():
         
         if len(preyCount) > 0:
             goose = preyCount[0]
+            index = 0
             # update the goose's image based on its state
             if goose.alive == True:
                 if goose.x < 20:
@@ -91,9 +92,11 @@ def showGameUi():
                 goose.dying()
                 if goose.y > 700:
                     preyCount.remove(goose)
-                index = preyCount.index(goose)
-                SCREEN.blit(PREYDEAD, (preyXPositions[index], 850))  
-        
+                 
+        # if score - last_score == goose.killPrice:
+        #     SCREEN.blit(PREYDEAD, (preyXPositions[index], 850)) 
+        #     index += 1
+        #     last_score = score  
         
         
         # score ui
@@ -135,15 +138,14 @@ def showGameUi():
                          
                     
                     if bulletsCount <= 0:
+                        last_score - score
                         goose.flyAway()
                         if goose.y < -goose.width or goose.x > WIDTH + goose.width:
                             preyCount.remove(goose)
-                            
+
                         pygame.time.delay(200)
-                          
                         bulletsCount = bulletsMaxCount
-                        
-                        
+          
                    
         pygame.display.flip()        
     pygame.quit()     
