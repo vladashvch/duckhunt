@@ -1,5 +1,5 @@
 import pygame
-from constants import TIMER, FPS, SCREEN
+from constants import TIMER, FPS, SCREEN, KILLRADIUS
 from cursor import Cursor
 from pray import Pray
 from random import randint
@@ -32,6 +32,14 @@ targetCursor = Cursor(0, 0, 50, 50, pygame.image.load("assets/cursor.png"))
 for _ in range(preyMaxCount):
     goose = Pray(-50, randint(200, 550), 154, 145, "images/goose_tileset.png")
     preyCount.append(goose)
+
+def checkKillCollision(prey, targetCursor, radius):
+    preyCenterX, preyCenterY = prey.getCenter()
+    targetCursorCenterX, targetCursorCenterY = targetCursor.getCenter()
+
+    distance = ((preyCenterX - targetCursorCenterX) ** 2 + (preyCenterY - targetCursorCenterY) ** 2) ** 0.5
+
+    return distance <= radius
     
 def showGameUi():
     run = True
@@ -51,6 +59,7 @@ def showGameUi():
         targetCursor.x = mousePos[0] - targetCursor.width / 2
         targetCursor.y = mousePos[1] - targetCursor.height / 2
         
+        killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS)  
         
         
         # hit ui
