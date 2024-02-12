@@ -1,1 +1,1 @@
-bulletsCount
+index =+ 1

@@ -23,6 +23,7 @@ LAYERBG = pygame.image.load("assets/background.png")
 HIT = pygame.image.load("assets/hit.png")
 PREYDEAD = pygame.image.load("assets/preydead.png")
 PREYALIVE = pygame.image.load("assets/preyalive.png")
+PREY = pygame.image.load("assets/prey.png")
 
 SHOT = pygame.image.load("assets/shot.png")
 BULLET = pygame.image.load("assets/bullet.png")
@@ -66,6 +67,15 @@ def showGameUi():
         targetCursor.x = mousePos[0] - targetCursor.width / 2
         targetCursor.y = mousePos[1] - targetCursor.height / 2
         
+        # hit ui
+        SCREEN.blit(HIT,(245,845))
+        # loop spawning of "alive prey" icons
+        preyXPosition = 370
+        for _ in range(preyMaxCount): 
+            SCREEN.blit(PREY, (preyXPosition, 850))
+            preyXPosition += 30 
+        preyXPositions = [370 + i * 30 for i in range(preyMaxCount)]
+        
         
         if len(preyCount) > 0:
             goose = preyCount[0]
@@ -74,19 +84,17 @@ def showGameUi():
                 if goose.x < 20:
                     goose.start()
                 else:
-                    goose.update()        
+                    goose.update()
+                     
+            
             else:
                 goose.dying()
                 if goose.y > 700:
                     preyCount.remove(goose)
+                index = preyCount.index(goose)
+                SCREEN.blit(PREYDEAD, (preyXPositions[index], 850))  
         
-        # hit ui
-        SCREEN.blit(HIT,(245,845))
-        # loop spawning of "alive prey" icons
-        preyAliveXPosition = 370
-        for _ in range(preyMaxCount): 
-            SCREEN.blit(PREYALIVE, (preyAliveXPosition, 850))
-            preyAliveXPosition += 30 
+        
         
         # score ui
         SCREEN.blit(SCORE,(800,870))
@@ -100,8 +108,6 @@ def showGameUi():
         for _ in range(bulletsCount):
             SCREEN.blit(BULLET, (bulletXPosition, 838))
             bulletXPosition += 30 
-
-
         bulletsRender = pygame.font.Font(FONT, 25).render("R = "+ str(bulletsCount), True, "White")
         bulletsLoc = bulletsRender.get_rect(center=(135,790))
         SCREEN.blit(bulletsRender, bulletsLoc)
@@ -125,7 +131,8 @@ def showGameUi():
                         goose.alive = False
                         score += goose.killPrice
                         preyScore += 1
-                        bulletsCount = bulletsMaxCount 
+                        bulletsCount = bulletsMaxCount
+                         
                     
                     if bulletsCount <= 0:
                         goose.flyAway()
