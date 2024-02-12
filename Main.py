@@ -11,7 +11,7 @@ preyScore = 0
 preyTimer = 0
 preyCount = []
 preyMaxCount = 10
-bulletsCount = []
+bulletsCount = 3
 bulletsMaxCount = 3
 
 pygame.display.set_caption("DuckHunt")
@@ -40,7 +40,9 @@ def checkKillCollision(prey, targetCursor, radius):
     distance = ((preyCenterX - targetCursorCenterX) ** 2 + (preyCenterY - targetCursorCenterY) ** 2) ** 0.5
 
     return distance <= radius
-    
+
+
+ 
 def showGameUi():
     run = True
     
@@ -61,8 +63,22 @@ def showGameUi():
         targetCursor.x = mousePos[0] - targetCursor.width / 2
         targetCursor.y = mousePos[1] - targetCursor.height / 2
         
-        killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS)  
         
+        if len(preyCount) > 0:
+            goose = preyCount[0]
+            # update the goose's image based on its state
+            if goose.alive == True:
+                if goose.x < 20:
+                    goose.start()
+                else:
+                    goose.update()
+            else:
+                # goose.flyAway()
+                # if goose.y < -goose.width or goose.x > WIDTH + goose.width:
+                #     preyCount.remove(goose)
+                goose.dying()
+                if goose.y > 700:
+                    preyCount.remove(goose)
         
         # hit ui
         SCREEN.blit(HIT,(245,845))
@@ -74,23 +90,31 @@ def showGameUi():
         
         # score ui
         SCREEN.blit(SCORE,(800,870))
-        textScore_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 35).render(str(preyScore), True, "White")
-        textScore_loc = textScore_render.get_rect(center=(880,850))
-        SCREEN.blit(textScore_render, textScore_loc)
+        textScoreRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 35).render(str(preyScore), True, "White")
+        textScoreLoc = textScoreRender.get_rect(center=(880,850))
+        SCREEN.blit(textScoreRender, textScoreLoc)
         
-        # bullets count ui
-        bullets_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 25).render("R = "+ str(len(bulletsCount)), True, "White")
-        bullets__loc = bullets_render.get_rect(center=(135,790))
-        SCREEN.blit(bullets_render, bullets__loc)
-        
+        global bulletsCount
+        global bulletsMaxCount  
         # shot ui
         SCREEN.blit(SHOT,(85,870))
-        # loop spawning of bullets icons
         bulletXPosition = 90
-        for _ in range(bulletsMaxCount):
+        for _ in range(bulletsCount):
             SCREEN.blit(BULLET, (bulletXPosition, 838))
             bulletXPosition += 30 
+            
+        if pygame.mouse.get_pressed()[0]:
+            bulletsCount -= 1
+            if bulletsCount < 0:
+                bulletsCount = bulletsMaxCount
+         
         
+        bulletsRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 25).render("R = "+ str(bulletsCount), True, "White")
+        bulletsLoc = bulletsRender.get_rect(center=(135,790))
+        SCREEN.blit(bulletsRender, bulletsLoc)
+        
+        
+        killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS)  
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -98,6 +122,7 @@ def showGameUi():
                 goose.alive = False
                 score += goose.killPrice
                 preyScore += 1 
+                
             
             
             # # show result depends on preyScore
@@ -110,22 +135,22 @@ def showGameUi():
 
 def showResult(text, score, preys):
     run = True
-    text_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render(text, True, "White")
-    score_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Score: " + str(score), True, "White")
-    pray_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
+    textRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render(text, True, "White")
+    scoreRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Score: " + str(score), True, "White")
+    prayRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
     
-    text_loc = text_render.get_rect(center=(500, 200))
-    score_loc = score_render.get_rect(center=(500, 250))
-    pray_loc = pray_render.get_rect(center=(500, 300))
+    text_loc = textRender.get_rect(center=(500, 200))
+    score_loc = scoreRender.get_rect(center=(500, 250))
+    pray_loc = prayRender.get_rect(center=(500, 300))
 
     while run:
         # show black rectangle behind text
         pygame.draw.rect(SCREEN, (0, 0, 0), (250, 150, 500, 225))
 
         # show text
-        SCREEN.blit(text_render, text_loc)
-        SCREEN.blit(score_render, score_loc)
-        SCREEN.blit(pray_render, pray_loc)
+        SCREEN.blit(textRender, text_loc)
+        SCREEN.blit(scoreRender, score_loc)
+        SCREEN.blit(prayRender, pray_loc)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 :
