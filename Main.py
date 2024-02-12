@@ -1,5 +1,7 @@
 import pygame
 from constants import TIMER, FPS, SCREEN
+from cursor import Cursor
+
 pygame.init()
 
 score  = 0
@@ -22,7 +24,7 @@ PREYALIVE = pygame.image.load("assets/preyalive.png")
 SHOT = pygame.image.load("assets/shot.png")
 BULLET = pygame.image.load("assets/bullet.png")
 SCORE =  pygame.image.load("assets/score.png")
-
+targetCursor = Cursor(0, 0, 50, 50, pygame.image.load("assets/cursor.png")) 
 
 def showResult(text, score, preys):
     run = True
@@ -61,6 +63,12 @@ def showGameUi():
         
         # upper layer with grass and ui
         SCREEN.blit(LAYERBG,(0,0))
+        
+        pygame.mouse.set_visible(False)
+        mousePos = pygame.mouse.get_pos()
+        targetCursor.draw() 
+        targetCursor.x = mousePos[0] - targetCursor.width / 2
+        targetCursor.y = mousePos[1] - targetCursor.height / 2
         
         # hit ui
         SCREEN.blit(HIT,(245,845))
