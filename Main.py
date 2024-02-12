@@ -27,7 +27,7 @@ PREYALIVE = pygame.image.load("assets/preyalive.png")
 SHOT = pygame.image.load("assets/shot.png")
 BULLET = pygame.image.load("assets/bullet.png")
 SCORE =  pygame.image.load("assets/score.png")
-
+FONT = "assets/VCR_OSD_MONO_1.001.ttf"
                             
 targetCursor = Cursor(0, 0, 50, 50, pygame.image.load("assets/cursor.png")) 
 for _ in range(preyMaxCount):
@@ -90,7 +90,7 @@ def showGameUi():
         
         # score ui
         SCREEN.blit(SCORE,(800,870))
-        textScore_render = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 35).render(str(score), True, "White")
+        textScore_render = pygame.font.Font(FONT, 35).render(str(score), True, "White")
         textScore_loc = textScore_render.get_rect(center=(880,850))
         SCREEN.blit(textScore_render, textScore_loc)
         
@@ -102,7 +102,7 @@ def showGameUi():
             bulletXPosition += 30 
 
 
-        bulletsRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 25).render("R = "+ str(bulletsCount), True, "White")
+        bulletsRender = pygame.font.Font(FONT, 25).render("R = "+ str(bulletsCount), True, "White")
         bulletsLoc = bulletsRender.get_rect(center=(135,790))
         SCREEN.blit(bulletsRender, bulletsLoc)
         
@@ -143,9 +143,9 @@ def showGameUi():
 
 def showResult(text, score, preys):
     run = True
-    textRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render(text, True, "White")
-    scoreRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Score: " + str(score), True, "White")
-    prayRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
+    textRender = pygame.font.Font(FONT, 45).render(text, True, "White")
+    scoreRender = pygame.font.Font(FONT, 45).render("Score: " + str(score), True, "White")
+    prayRender = pygame.font.Font(FONT, 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
     
     text_loc = textRender.get_rect(center=(500, 200))
     score_loc = scoreRender.get_rect(center=(500, 250))
