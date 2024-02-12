@@ -47,6 +47,8 @@ def showGameUi():
     while run:
         TIMER.tick(FPS)
         
+        score  = 0
+        preyScore = 0
         # fill down layer of screen with color
         SCREEN.fill(pygame.Color('#3FBFFE'))
         
@@ -92,12 +94,17 @@ def showGameUi():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                
-            # show result depends on preyScore
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    showResult(" You win! ", score, preyScore)
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                    showResult(" Oh no... You lose! ", score, preyScore)          
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and killCollision:
+                goose.alive = False
+                score += goose.killPrice
+                preyScore += 1 
+            
+            
+            # # show result depends on preyScore
+            # if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            #         showResult(" You win! ", score, preyScore)
+            # elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            #         showResult(" Oh no... You lose! ", score, preyScore)          
         pygame.display.flip()        
     pygame.quit()     
 
