@@ -42,13 +42,15 @@ def checkKillCollision(prey, targetCursor, radius):
     return distance <= radius
 
 
+
  
 def showGameUi():
     run = True
     
     while run:
         TIMER.tick(FPS)
-        
+        current_time = pygame.time.get_ticks()
+
         score  = 0
         preyScore = 0
         # fill down layer of screen with color
@@ -90,25 +92,17 @@ def showGameUi():
         
         # score ui
         SCREEN.blit(SCORE,(800,870))
-        textScoreRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 35).render(str(preyScore), True, "White")
-        textScoreLoc = textScoreRender.get_rect(center=(880,850))
-        SCREEN.blit(textScoreRender, textScoreLoc)
+        
         
         global bulletsCount
         global bulletsMaxCount  
-        # shot ui
         SCREEN.blit(SHOT,(85,870))
         bulletXPosition = 90
         for _ in range(bulletsCount):
             SCREEN.blit(BULLET, (bulletXPosition, 838))
             bulletXPosition += 30 
-            
-        if pygame.mouse.get_pressed()[0]:
-            bulletsCount -= 1
-            if bulletsCount < 0:
-                bulletsCount = bulletsMaxCount
-         
-        
+
+
         bulletsRender = pygame.font.Font("assets/VCR_OSD_MONO_1.001.ttf", 25).render("R = "+ str(bulletsCount), True, "White")
         bulletsLoc = bulletsRender.get_rect(center=(135,790))
         SCREEN.blit(bulletsRender, bulletsLoc)
@@ -118,11 +112,19 @@ def showGameUi():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and killCollision:
-                goose.alive = False
-                score += goose.killPrice
-                preyScore += 1 
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                bulletsCount -= 1
                 
+                if killCollision:
+                    goose.alive = False
+                    score += goose.killPrice
+                    preyScore += 1
+                    bulletsCount = bulletsMaxCount 
+                
+                if bulletsCount <= 0:
+                    bulletsCount = bulletsMaxCount
+                     
+                 
             
             
             # # show result depends on preyScore
