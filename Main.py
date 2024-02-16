@@ -38,15 +38,17 @@ def checkKillCollision(prey, targetCursor, radius):
     distance = ((preyCenterX - targetCursorCenterX) ** 2 + (preyCenterY - targetCursorCenterY) ** 2) ** 0.5
     return distance <= radius
 
-def showGameUi():
+def showGame():
     run = True
     prayFramesUpdating = 0
+    bulletsCount = 3
+    bulletsMaxCount = 3 
+    score  = 0
+    preyScore = 0  
+     
     while run:
         TIMER.tick(FPS)
-        bulletsCount = 3
-        bulletsMaxCount = 3 
-        score  = 0
-        preyScore = 0   
+        
         # fill down layer of screen with color
         SCREEN.fill(pygame.Color('#3FBFFE'))
         
@@ -72,8 +74,7 @@ def showGameUi():
                 else:
                     goose.update()
                     prayFramesUpdating+=1
-         
-      
+                    
         SCREEN.blit(LAYERBG,(0,0))
         
         pygame.mouse.set_visible(False)
@@ -81,12 +82,26 @@ def showGameUi():
         targetCursor.draw() 
         targetCursor.x = mousePos[0] - targetCursor.width / 2
         targetCursor.y = mousePos[1] - targetCursor.height / 2
+        killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS) 
         
         SCREEN.blit(HIT,(245,845))
+        blit_arguments = []
         preyXPosition = 370
         for _ in range(preyMaxCount): 
+            blit_arguments.append((PREY, (preyXPosition, 850)))
             SCREEN.blit(PREY, (preyXPosition, 850))
             preyXPosition += 30 
+            
+        for i, is_alive in enumerate(preyDefeatCount):
+            if is_alive:  
+                x, y = blit_arguments[i][1]  
+                blit_arguments[i] = (PREYDEAD, (x, y)) 
+                SCREEN.blit(PREYDEAD, (x, y))
+                
+            if not is_alive:  
+                x, y = blit_arguments[i][1]  
+                blit_arguments[i] = (PREYALIVE, (x, y)) 
+                SCREEN.blit(PREYALIVE, (x, y))
             
         SCREEN.blit(SCORE,(800,870))
         textScore_render = pygame.font.Font(FONT, 35).render(str(score), True, "White")
@@ -102,17 +117,19 @@ def showGameUi():
         bulletsLoc = bulletsRender.get_rect(center=(135,790))
         SCREEN.blit(bulletsRender, bulletsLoc)
         
-        killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS)  
         for event in pygame.event.get():
             if len(preyDefeatCount) == preyMaxCount and preyDefeatCount.count(True) >= winPreyCount:
                 showResult(" You win! ", score, preyScore)
+                return 
                 
             elif len(preyDefeatCount) == preyMaxCount and preyDefeatCount.count(True) < winPreyCount:
                     showResult(" Oh no... You lose! ", score, preyScore)  
+                    return 
                     
             else:
                 if event.type == pygame.QUIT:
                     run = False
+                    
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and bulletsCount >= 1:
                     bulletsCount -= 1
                     
@@ -120,11 +137,9 @@ def showGameUi():
                         goose.alive = False
                         score += goose.killPrice
                         preyScore += 1
-                        bulletsCount = bulletsMaxCount
-          
-                   
+                        bulletsCount = bulletsMaxCount      
         pygame.display.flip()        
-    pygame.quit()     
+        
 
 def showResult(text, score, preys):
     run = True
@@ -137,6 +152,7 @@ def showResult(text, score, preys):
     pray_loc = prayRender.get_rect(center=(500, 300))
 
     while run:
+        pygame.mouse.set_visible(True)
         # show black rectangle behind text
         pygame.draw.rect(SCREEN, (0, 0, 0), (250, 150, 500, 225))
 
@@ -148,24 +164,26 @@ def showResult(text, score, preys):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 :
                 run = False
+                return 
+                
         pygame.display.flip()
     pygame.quit()
     
 def startMenu():
     run = True
-    
     while run:  
+        pygame.mouse.set_visible(True)
+        SCREEN.blit(STARTBG,(0,0))
+        pygame.display.flip()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    showGameUi()  
-        
-        #show start menu bg
-        SCREEN.blit(STARTBG,(0,0))
-        pygame.display.flip()        
-    pygame.quit()     
+                showGame()   
+                return        
+    pygame.quit()
 
 if __name__ == "__main__":
     startMenu()
-    
+         
