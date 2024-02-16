@@ -45,10 +45,10 @@ def checkKillCollision(prey, targetCursor, radius):
 
 last_score = 0
 
- 
+
 def showGameUi():
     run = True
-    
+    prayFramesUpdating = 0
     while run:
         TIMER.tick(FPS)
         global bulletsCount
@@ -58,6 +58,28 @@ def showGameUi():
         # fill down layer of screen with color
         SCREEN.fill(pygame.Color('#3FBFFE'))
         
+        if len(preyCount) > 0:
+            goose = preyCount[0]
+            index = 0
+            # update the goose's image based on its state
+            if goose.alive == False:
+                goose.dying()
+                if goose.y > 700:
+                    preyCount.remove(goose)
+                    prayFramesUpdating = 0
+            elif bulletsCount == 0 or prayFramesUpdating>=FPS * 5: #or 5 sec & goose.alive == True
+                goose.flyAway()
+                if goose.y < -goose.width or goose.x > WIDTH + goose.width:
+                    preyCount.remove(goose)
+                    bulletsCount = bulletsMaxCount
+                    prayFramesUpdating = 0  
+            else:
+                if goose.x < 20:
+                    goose.start()
+                else:
+                    goose.update()
+                    prayFramesUpdating+=1
+                 
         # upper layer with grass and ui
         SCREEN.blit(LAYERBG,(0,0))
         
@@ -76,23 +98,6 @@ def showGameUi():
             preyXPosition += 30 
         preyXPositions = [370 + i * 30 for i in range(preyMaxCount)]
         
-        
-        if len(preyCount) > 0:
-            goose = preyCount[0]
-            index = 0
-            # update the goose's image based on its state
-            if goose.alive == True:
-                if goose.x < 20:
-                    goose.start()
-                else:
-                    goose.update()
-                     
-            
-            else:
-                goose.dying()
-                if goose.y > 700:
-                    preyCount.remove(goose)
-                 
         # if score - last_score == goose.killPrice:
         #     SCREEN.blit(PREYDEAD, (preyXPositions[index], 850)) 
         #     index += 1
@@ -137,18 +142,18 @@ def showGameUi():
                         bulletsCount = bulletsMaxCount
                          
                     
-                    if bulletsCount <= 0:
-                        last_score - score
-                        goose.flyAway()
-                        if goose.y < -goose.width or goose.x > WIDTH + goose.width:
-                            preyCount.remove(goose)
+                    # if bulletsCount <= 0:
+                    #     last_score - score
+                    #     goose.flyAway()
+                    #     if goose.y < -goose.width or goose.x > WIDTH + goose.width:
+                    #         preyCount.remove(goose)
 
-                        pygame.time.delay(200)
-                        bulletsCount = bulletsMaxCount
+                    #     pygame.time.delay(200)
+                    #     bulletsCount = bulletsMaxCount
           
                    
         pygame.display.flip()        
-    pygame.quit()     
+    # pygame.quit()     
 
 def showResult(text, score, preys):
     run = True
