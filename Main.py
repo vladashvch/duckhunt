@@ -4,6 +4,7 @@ from cursor import Cursor
 from pray import Pray
 from hunter import Hunter
 from random import randint
+import time
 
 pygame.init()
 pygame.display.set_caption("DuckHunt")
@@ -33,7 +34,9 @@ for _ in range(preyMaxCount):
     goose = Pray(-50, randint(200, 550), 154, 145, "images/goose_tileset.png")
     preyCount.append(goose)
 
-dog = Hunter(400, 500, 200, 150, "assets/dog_tileset.png")
+dogCount = []  # List to store dog objects
+dog = Hunter(400, 580, 200, 150, "assets/dog_tileset.png")
+dogCount.append(dog)  # Add initial dog object to the list
 targetCursor = Cursor(0, 0, 50, 50, CURSOR) 
 
 def checkKillCollision(prey, targetCursor, radius):
@@ -49,34 +52,47 @@ def showGame():
     bulletsMaxCount = 3 
     score  = 0
     preyScore = 0  
-
+    laughing_start_time = None
     while run:
         TIMER.tick(FPS)
         
-        # fill down layer of screen with color
         SCREEN.fill(pygame.Color('#3FBFFE'))
-        dog.update("laughing")
+        
         if len(preyCount) > 0:
             goose = preyCount[0]
-            
-            # update the goose's image based on its state
+
             if goose.alive == False:
                 goose.dying()
 
                 if goose.y > 700:
-                    preyCount.remove(goose)
-                    preyDefeatCount.append(True)
-                    prayFramesUpdating = 0
                     
-            elif bulletsCount == 0 or prayFramesUpdating>=FPS * 5: #or 5 sec & goose.alive == True
+                    dog.update("catch")
+                    if laughing_start_time is None:
+                        laughing_start_time = time.time()
+                
+                    if time.time() - laughing_start_time >= 2.2:
+                        preyCount.remove(goose)
+                        preyDefeatCount.append(True)
+                        prayFramesUpdating = 0
+                    
+            elif bulletsCount == 0 or prayFramesUpdating >= FPS * 5:  # or 5 sec & goose.alive == True
                 goose.flyAway()
                 
-                if goose.y < -goose.width or goose.x > WIDTH + goose.width:
-                    preyCount.remove(goose)
-                    preyDefeatCount.append(False)
-                    bulletsCount = bulletsMaxCount
-                    prayFramesUpdating = 0  
-                    
+                
+                dog.update("laughing")
+                if laughing_start_time is None:
+                    laughing_start_time = time.time()
+                
+                if time.time() - laughing_start_time >= 2.2:
+                    if goose.y < -goose.width or goose.x > WIDTH + goose.width:
+                        preyCount.remove(goose)
+                        dogCount.remove(dog)
+                        preyDefeatCount.append(False)
+                        bulletsCount = bulletsMaxCount
+                        prayFramesUpdating = 0
+                        laughing_start_time = None 
+                        dogCount.append(dog)
+                               
             else:
                 if goose.x < 20:
                     goose.start()
@@ -146,6 +162,10 @@ def showGame():
                     bulletsCount -= 1
                     
                     if killCollision:
+                        textScore_render = pygame.font.Font(FONT, 35).render(str(goose.killPrice), True, "White")
+                        textScore_loc = textScore_render.get_rect(center=(goose.x , goose.y ))
+                        SCREEN.blit(textScore_render, textScore_loc)
+                                        
                         goose.alive = False
                         score += goose.killPrice
                         preyScore += 1
