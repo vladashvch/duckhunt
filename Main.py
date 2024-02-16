@@ -10,6 +10,7 @@ score  = 0
 preyScore = 0
 preyTimer = 0
 preyCount = []
+preyDefeatCount = []
 preyMaxCount = 10
 bulletsCount = 3
 bulletsMaxCount = 3
@@ -60,17 +61,18 @@ def showGameUi():
         
         if len(preyCount) > 0:
             goose = preyCount[0]
-            index = 0
             # update the goose's image based on its state
             if goose.alive == False:
                 goose.dying()
                 if goose.y > 700:
                     preyCount.remove(goose)
+                    preyDefeatCount.append(True)
                     prayFramesUpdating = 0
             elif bulletsCount == 0 or prayFramesUpdating>=FPS * 5: #or 5 sec & goose.alive == True
                 goose.flyAway()
                 if goose.y < -goose.width or goose.x > WIDTH + goose.width:
                     preyCount.remove(goose)
+                    preyDefeatCount.append(False)
                     bulletsCount = bulletsMaxCount
                     prayFramesUpdating = 0  
             else:
@@ -123,16 +125,16 @@ def showGameUi():
         
         killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS)  
         for event in pygame.event.get():
-            if preyCount == preyMaxCount and preyCount == winPreyCount:
+            if len(preyDefeatCount) == preyMaxCount and preyDefeatCount.count(True) >= winPreyCount:
                 showResult(" You win! ", score, preyScore)
                 
-            elif preyCount == preyMaxCount and preyCount != winPreyCount:
+            elif len(preyDefeatCount) == preyMaxCount and preyDefeatCount.count(True) < winPreyCount:
                     showResult(" Oh no... You lose! ", score, preyScore)  
                     
             else:
                 if event.type == pygame.QUIT:
                     run = False
-                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and bulletsCount >= 1:
                     bulletsCount -= 1
                     
                     if killCollision:
@@ -140,16 +142,6 @@ def showGameUi():
                         score += goose.killPrice
                         preyScore += 1
                         bulletsCount = bulletsMaxCount
-                         
-                    
-                    # if bulletsCount <= 0:
-                    #     last_score - score
-                    #     goose.flyAway()
-                    #     if goose.y < -goose.width or goose.x > WIDTH + goose.width:
-                    #         preyCount.remove(goose)
-
-                    #     pygame.time.delay(200)
-                    #     bulletsCount = bulletsMaxCount
           
                    
         pygame.display.flip()        
@@ -177,8 +169,9 @@ def showResult(text, score, preys):
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 :
                 run = False
+        
         pygame.display.flip()
-    pygame.quit()
+    # pygame.quit()
     
 def startMenu():
     run = True
