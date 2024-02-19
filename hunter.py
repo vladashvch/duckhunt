@@ -4,9 +4,11 @@ from object import Object
 from constants import TIMER, FPS
 class Hunter(Object):
     animationFramerate = 12
+    defaultX = 400
+    defaultY = 580
     
-    def __init__(self, x, y, width, height, tileset, direction=1):
-        super().__init__(x, y, width, height, None)
+    def __init__(self, width, height, tileset, direction=1):
+        super().__init__(self.defaultX, self.defaultY, width, height, None)
         self.tileset = self.load_tileset(tileset, width, height)
         self.direction = direction
         self.flipX = False
@@ -25,7 +27,8 @@ class Hunter(Object):
             self.going_down = True 
 
         elif self.y > yTemp:  
-            self.going_down = False  
+            self.going_down = False
+              
 
         if self.going_down:
             self.y += 2  
@@ -70,3 +73,14 @@ class Hunter(Object):
                 self.frame = 0
             self.frame_timer = 0  
                 
+    def initialState(self):
+        self.x = self.defaultX
+        self.y = self.defaultY
+        self.direction = 1
+        self.flipX = False
+        self.frame = 0
+        self.frames = [0] 
+        self.frame_timer = 0
+        self.delay_timer = 0
+        self.velocity = [0, 0]
+        self.going_down = False

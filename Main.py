@@ -34,9 +34,7 @@ for _ in range(preyMaxCount):
     goose = Pray(-50, randint(200, 550), 154, 145, "images/goose_tileset.png")
     preyCount.append(goose)
 
-dogCount = []  # List to store dog objects
-dog = Hunter(400, 580, 200, 150, "assets/dog_tileset.png")
-dogCount.append(dog)  # Add initial dog object to the list
+dog = Hunter(200, 150, "assets/dog_tileset.png")
 targetCursor = Cursor(0, 0, 50, 50, CURSOR) 
 
 def checkKillCollision(prey, targetCursor, radius):
@@ -65,37 +63,34 @@ def showGame():
                 goose.dying()
 
                 if goose.y > 700:
-                    
                     dog.update("catch")
                     if laughing_start_time is None:
                         laughing_start_time = time.time()
                 
-                    if time.time() - laughing_start_time >= 2.2:
+                    if time.time() - laughing_start_time >= 3:
                         preyCount.remove(goose)
                         preyDefeatCount.append(True)
                         prayFramesUpdating = 0
+                        laughing_start_time = None
                     
             elif bulletsCount == 0 or prayFramesUpdating >= FPS * 5:  # or 5 sec & goose.alive == True
                 goose.flyAway()
-                
-                
                 dog.update("laughing")
                 if laughing_start_time is None:
                     laughing_start_time = time.time()
                 
-                if time.time() - laughing_start_time >= 2.2:
+                if time.time() - laughing_start_time >= 3:
                     if goose.y < -goose.width or goose.x > WIDTH + goose.width:
                         preyCount.remove(goose)
-                        dogCount.remove(dog)
                         preyDefeatCount.append(False)
                         bulletsCount = bulletsMaxCount
                         prayFramesUpdating = 0
                         laughing_start_time = None 
-                        dogCount.append(dog)
                                
             else:
                 if goose.x < 20:
                     goose.start()
+                    dog.initialState()
                 else:
                     goose.update()
                     prayFramesUpdating+=1
