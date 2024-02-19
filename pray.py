@@ -3,14 +3,12 @@ from random import randint, choice
 from constants import BOUNDS_X, BOUNDS_Y, SCREEN, WIDTH, CHARANIMATIONFPS
 from gamechar import GameChar
 class Pray(GameChar):
-    alive = True
     killPrice = 100
     minVelocity = 4
     maxVelocity = 6
     horizontalFlyRow = 1 #row in tileset
     upFlyRow = 0
-    gooseFallChoice = choice([1,2])
-
+    
     def __init__(self, x, y, width, height, tileset, direction=1):
         super().__init__(x, y, width, height, None)
         self.tileset = self.load_tileset(tileset, width, height)
@@ -20,6 +18,9 @@ class Pray(GameChar):
         self.frames = [0, 1, 2, 1]
         self.frame_timer = 0
         self.velocity = [0, 0]
+        self.gooseFallChoice = choice([1,2])
+        self.alive = True
+        
         
     def update(self):
         self.move()
@@ -100,9 +101,9 @@ class Pray(GameChar):
 
     def flyAway(self):
         if self.x > WIDTH/2:
-            self.velocity = [8, -8]
+            self.velocity = [self.maxVelocity, -self.maxVelocity]
         else:
-            self.velocity = [-8, -8]
+            self.velocity = [-self.maxVelocity, -self.maxVelocity]
         self.x += self.velocity[0]
         self.y += self.velocity[1]
         self.draw()
