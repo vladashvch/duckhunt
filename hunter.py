@@ -11,10 +11,9 @@ class Hunter(Object):
         self.direction = direction
         self.flipX = False
         self.frame = 0
-        self.frames = [0]  # Початково використовуємо перший кадр
+        self.frames = [0] 
         self.frame_timer = 0
         self.delay_timer = 0
-        self.delay_duration = 5 * FPS  # Затримка у 5 секунд
         self.velocity = [0, 0]
         self.going_down = False
         
