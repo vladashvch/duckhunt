@@ -1,16 +1,15 @@
 import pygame
 from random import randint, choice
-from constants import BOUNDS_X, BOUNDS_Y, SCREEN, WIDTH
-from object import Object
-class Pray(Object):
+from constants import BOUNDS_X, BOUNDS_Y, SCREEN, WIDTH, CHARANIMATIONFPS
+from gamechar import GameChar
+class Pray(GameChar):
     alive = True
     killPrice = 100
-    animationFramerate = 12
     minVelocity = 4
-    maxVelocity = 8
+    maxVelocity = 6
     horizontalFlyRow = 1 #row in tileset
     upFlyRow = 0
-    randomFall = choice([1,2])
+    gooseFallChoice = choice([1,2])
 
     def __init__(self, x, y, width, height, tileset, direction=1):
         super().__init__(x, y, width, height, None)
@@ -51,7 +50,7 @@ class Pray(Object):
         
         self.frame_timer += 1
 
-        if self.frame_timer < self.animationFramerate:
+        if self.frame_timer < CHARANIMATIONFPS:
             return
         
         self.frame += 1
@@ -77,27 +76,27 @@ class Pray(Object):
         # Changing the value if speed_x and speed_y both are zero
         if self.velocity == [0, 0]:
             self.velocity = [randint(self.minVelocity, self.maxVelocity) * self.direction, randint(self.minVelocity, self.maxVelocity) * self.direction]
-        # Changing the direction and x,y coordinate of the object if the coordinate of left side is less..or right side coordinate is greater..
+        # Changing the direction and x,y coordinate of the GameObj if the coordinate of left side is less..or right side coordinate is greater..
         if self.x <= BOUNDS_X[0] or self.x + self.width >= BOUNDS_X[1]:
             self.move_direction = -1 if self.x + self.width >= BOUNDS_X[1] else 1
             self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
             self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
         
-        # Changing the direction and x,y coordinate of the object if the coordinate of top side is less.. or bottom side coordinate is greater..
+        # Changing the direction and x,y coordinate of the GameObj if the coordinate of top side is less.. or bottom side coordinate is greater..
         if self.y <= BOUNDS_Y[0] or self.y + self.height >= BOUNDS_Y[1]:
             self.move_direction = -1 if self.y + self.height >= BOUNDS_Y[1] else 1
             self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
             self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
 
     def dying(self):
-        if self.frame_timer < self.animationFramerate*2: # 2 cycles
+        if self.frame_timer < CHARANIMATIONFPS*2: # 2 cycles
             SCREEN.blit(pygame.transform.scale(self.tileset[0][2], (self.width, self.height)), (self.x, self.y))
             self.frame_timer += 1
             self.y -= 0.5
             return
         
         self.y += 8
-        SCREEN.blit(pygame.transform.scale(self.tileset[self.randomFall][2], (self.width, self.height)), (self.x, self.y))
+        SCREEN.blit(pygame.transform.scale(self.tileset[self.gooseFallChoice][2], (self.width, self.height)), (self.x, self.y))
 
     def flyAway(self):
         if self.x > WIDTH/2:
