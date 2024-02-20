@@ -49,13 +49,7 @@ class Hunter(GameChar):
             image = pygame.transform.scale(self.tileset[self.laughFrames[self.frame]][self.reactionLine], (self.width, self.height))
             SCREEN.blit(pygame.transform.flip(image, self.flipX, False), (self.x, self.y))
 
-            self.frameTimer += 1
-            if self.frameTimer < self.CHARANIMATIONFPS:
-                return
-            self.frame += 1
-            if self.frame >= len(self.laughFrames):
-                self.frame = 0
-            self.frameTimer = 0  
+            self.frameTimerMethod(self.laughFrames) # GameChar method
                 
     def initialState(self):
         self.x = self.defaultX

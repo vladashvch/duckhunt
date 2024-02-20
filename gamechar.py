@@ -1,5 +1,5 @@
 import pygame
-from constants import SCREEN
+from constants import SCREEN, CHARANIMATIONFPS
 from abc import ABC, abstractmethod
 from gameobj import GameObj
 
@@ -17,6 +17,15 @@ class GameChar(ABC, GameObj):
         self.x += self.velocity[0]
         self.y += self.velocity[1]
         self.draw()
+    
+    @abstractmethod
+    def draw(self):
+        """
+        Draws the game character on the screen. Rescaling image to object's width and height. And flips
+        """
+        
+        image = pygame.transform.scale(self.tileset[self.moveFrameOrder[self.frame]][self.direction], (self.width, self.height))
+        SCREEN.blit(pygame.transform.flip(image, self.flipX, self.flipY), (self.x, self.y))
     
     def load_tileset(self, filename, width, height):
         """
@@ -39,7 +48,16 @@ class GameChar(ABC, GameObj):
                 line.append(image.subsurface(rect))
         return tileset
     
-    @abstractmethod
-    def draw(self):
-        image = pygame.transform.scale(self.tileset[self.moveFrameOrder[self.frame]][self.direction], (self.width, self.height))
-        SCREEN.blit(pygame.transform.flip(image, self.flipX, self.flipY), (self.x, self.y))
+
+    def frameTimerMethod(self, frameList):
+        """
+        A method for changing the frame of the character's animation based on the frameList and CHARANIMATIONFPS.
+        Args:
+            frameList (list): A list of integers representing the frames of the character's animation."""
+        self.frameTimer += 1
+        if self.frameTimer < CHARANIMATIONFPS:
+            return     
+        self.frame += 1
+        if self.frame >= len(frameList):
+            self.frame = 0
+        self.frameTimer = 0
