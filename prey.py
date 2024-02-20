@@ -2,7 +2,7 @@ import pygame
 from random import randint, choice
 from constants import BOUNDS_X, BOUNDS_Y, SCREEN, WIDTH, CHARANIMATIONFPS
 from gamechar import GameChar
-class Pray(GameChar):
+class Prey(GameChar):
     """
     Class for the prey object in the game. Inherits from abstract GameChar.
 
@@ -33,7 +33,7 @@ class Pray(GameChar):
     
     def __init__(self, x, y, width, height, tileset, direction=1):
         """
-        Constructor for Pray class.
+        Constructor for Prey class.
         Args:
             x (int): The x-coordinate of the top left corner of the prey.
             y (int): The y-coordinate of the top left corner of the prey.
@@ -147,7 +147,7 @@ class Pray(GameChar):
         """
         Animates the prey's death and falling down from the screen.
 
-        Pray has death animation 2 seconds, it's 2 cycles, and then goes down by value.
+        Prey has death animation 2 seconds, it's 2 cycles, and then goes down by value.
         """
         if self.frame_timer < CHARANIMATIONFPS*2: # 2 cycles
             SCREEN.blit(pygame.transform.scale(self.tileset[0][2], (self.width, self.height)), (self.x, self.y))
@@ -162,7 +162,7 @@ class Pray(GameChar):
         """
         Makes the prey fly away from the screen.
 
-        Pray changes its position on screen diagonaly-up with given value to the left or right side depending on the side of the screen.
+        Prey changes its position on screen diagonaly-up with given value to the left or right side depending on the side of the screen.
         """
         if self.x > WIDTH/2:
             self.velocity = [self.maxVelocity, -self.maxVelocity]
@@ -176,7 +176,7 @@ class Pray(GameChar):
         """
         Makes the prey fly on its start point before hunting.
 
-        Pray moves diagonaly-up with given value to the right side
+        Prey moves diagonaly-up with given value to the right side
         """
         self.velocity = [8, -8]
         self.x += self.velocity[0]

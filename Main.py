@@ -1,7 +1,7 @@
 import pygame
 from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH
 from gameobj import GameObj
-from pray import Pray
+from prey import Prey
 from random import randint
 
 pygame.init()
@@ -29,7 +29,7 @@ CURSOR = pygame.image.load("assets/cursor.png")
                             
 targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
 for _ in range(preyMaxCount):
-    goose = Pray(-50, randint(200, 550), 154, 145, "assets\goose_tileset.png")
+    goose = Prey(-50, randint(200, 550), 154, 145, "assets\goose_tileset.png")
     preyCount.append(goose)
 
 def checkKillCollision(prey, targetCursor, radius):
