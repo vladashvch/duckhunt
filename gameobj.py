@@ -27,9 +27,7 @@ class GameObj():
     
     def getCenter(self): 
         """
-        finds the center of an object
-
-        use for objects collisions
+        finds the center of an object use for objects collisions
 
         return: tuple (center_x, center_y)
         """

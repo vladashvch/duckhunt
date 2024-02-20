@@ -49,12 +49,29 @@ targetCursor = GameObj(0, 0, 50, 50, CURSOR)
 
 
 def checkKillCollision(prey, targetCursor, radius):
+    """
+    Check if there is a collision between the prey and the target cursor within the given radius.
+    Args:
+        prey (object): The prey object.
+        targetCursor (object): The target cursor object.
+        radius (float): The radius within which the collision is checked.
+    Returns:
+        bool: True if there is a collision, False otherwise.
+    """
     preyCenterX, preyCenterY = prey.getCenter()
     targetCursorCenterX, targetCursorCenterY = targetCursor.getCenter()
     distance = ((preyCenterX - targetCursorCenterX) ** 2 + (preyCenterY - targetCursorCenterY) ** 2) ** 0.5
     return distance <= radius
 
 def showGame():
+    """
+    Show the main game loop for the Duck Hunt game.
+
+    This function initializes the game variables, updates the game state, and handles user input.
+    It displays the game screen, including the background, prey, score, bullets, and target cursor.
+    The function also checks for collisions between the target cursor and the prey, and updates the score accordingly.
+    The game loop continues until the player wins or loses the game, or chooses to quit.
+    """
     run = True
     prayFramesUpdating = 0
     bulletsCount = 3
@@ -180,6 +197,11 @@ def showGame():
         
 
 def showResult(text, score, preys):
+    """
+    This method is responsible for displaying the result of a certain operation or process.
+    It might be used to show the outcome of a game, the result of a calculation, or any other type of result.
+    The specific behavior of this method depends on the context in which it's used and the way it's implemented.
+    """
     run = True
     textRender = pygame.font.Font(FONT, 45).render(text, True, "White")
     scoreRender = pygame.font.Font(FONT, 45).render("Score: " + str(score), True, "White")
@@ -208,6 +230,11 @@ def showResult(text, score, preys):
     pygame.quit()
     
 def startMenu():
+    """
+    This method is responsible for displaying the result of a certain operation or process.
+    It might be used to show the outcome of a game, the result of a calculation, or any other type of result.
+    The specific behavior of this method depends on the context in which it's used and the way it's implemented.
+    """
     run = True
     while run:  
         pygame.mouse.set_visible(True)
