@@ -71,9 +71,6 @@ def showGame():
     It displays the game screen, including the background, prey, score, bullets, and target cursor.
     The function also checks for collisions between the target cursor and the prey, and updates the score accordingly.
     The game loop continues until the player wins or loses the game, or chooses to quit.
-
-    Returns:
-        None
     """
     run = True
     prayFramesUpdating = 0

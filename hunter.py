@@ -18,7 +18,7 @@ class Hunter(GameChar):
     - frameTimer (int): The timer for controlling the animation frame rate.
     - velocity (list): The velocity of the hunter in the x and y directions.
     - goingDown (bool): Indicates whether the hunter is moving down.
-    - xMax (int): The maximum y-coordinate the hunter can reach before going down.
+    - heighPlus (int): The maximum y-coordinate the hunter can reach before going down.
 
     Methods:
     - __init__(self, x, y, width, height, tileset, xMax): Constructor for Hunter class.
