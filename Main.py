@@ -41,10 +41,10 @@ elif args.drone:
     dogTilesetPath = "assets/dog_drone_tileset.png"   
     
 for _ in range(PREY_MAX_COUNT):
-    goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath)
+    goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath, 100)
     preyCount.append(goose)
 
-dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 293, dogTilesetPath,200)
+dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 293, dogTilesetPath, 200)
 targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
 
 
