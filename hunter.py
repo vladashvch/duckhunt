@@ -1,9 +1,8 @@
 import pygame
 from random import choice
-from constants import SCREEN
+from constants import SCREEN, CHARANIMATIONFPS
 from gamechar import GameChar
 class Hunter(GameChar):
-    animationFramerate = 12
     defaultX = 400
     defaultY = 590
     reactionLine = 0
@@ -51,7 +50,7 @@ class Hunter(GameChar):
             SCREEN.blit(pygame.transform.flip(image, self.flipX, False), (self.x, self.y))
 
             self.frameTimer += 1
-            if self.frameTimer < self.animationFramerate:
+            if self.frameTimer < self.CHARANIMATIONFPS:
                 return
             self.frame += 1
             if self.frame >= len(self.laughFrames):
