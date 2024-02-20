@@ -1,5 +1,5 @@
 import pygame
-from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH
+from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH, PREY_MAX_COUNT, WIN_PREY_COUNT
 from gameobj import GameObj
 from prey import Prey
 from hunter import Hunter
@@ -23,14 +23,10 @@ CURSOR = pygame.image.load("assets/cursor.png")
 
 preyTimer = 0
 preyDefeatCount = []
-preyMaxCount = 10
-winPreyCount = 8
-last_score = 0  
-   
                             
 
 preyCount = []
-for _ in range(preyMaxCount):
+for _ in range(PREY_MAX_COUNT):
     goose = Prey(-50, randint(200, 550), 154, 145, "assets\goose_tileset.png")
     preyCount.append(goose)
 
@@ -51,7 +47,7 @@ def showGame():
     bulletsMaxCount = 3 
     score  = 0
     preyScore = 0  
-    laughing_start_time = None
+    hunterStartTime = None
     while run:
         TIMER.tick(FPS)
         
@@ -65,28 +61,28 @@ def showGame():
 
                 if goose.y > 700:
                     dog.update("catch")
-                    if laughing_start_time is None:
-                        laughing_start_time = time.time()
+                    if hunterStartTime is None:
+                        hunterStartTime = time.time()
                 
-                    if time.time() - laughing_start_time >= 3:
+                    if time.time() - hunterStartTime >= 3:
                         preyCount.remove(goose)
                         preyDefeatCount.append(True)
                         prayFramesUpdating = 0
-                        laughing_start_time = None
+                        hunterStartTime = None
                     
             elif bulletsCount == 0 or prayFramesUpdating >= FPS * 5:  # or 5 sec & goose.alive == True
                 goose.flyAway()
                 dog.update("laughing")
-                if laughing_start_time is None:
-                    laughing_start_time = time.time()
+                if hunterStartTime is None:
+                    hunterStartTime = time.time()
                 
-                if time.time() - laughing_start_time >= 3:
+                if time.time() - hunterStartTime >= 3:
                     if goose.y < -goose.width or goose.x > WIDTH + goose.width:
                         preyCount.remove(goose)
                         preyDefeatCount.append(False)
                         bulletsCount = bulletsMaxCount
                         prayFramesUpdating = 0
-                        laughing_start_time = None 
+                        hunterStartTime = None 
                                
             else:
                 if goose.x < 20:
@@ -110,7 +106,7 @@ def showGame():
         SCREEN.blit(HIT,(245,845))
         blit_arguments = []
         preyXPosition = 370
-        for _ in range(preyMaxCount): 
+        for _ in range(PREY_MAX_COUNT): 
             blit_arguments.append((PREY, (preyXPosition, 850)))
             SCREEN.blit(PREY, (preyXPosition, 850))
             preyXPosition += 30 
@@ -128,9 +124,9 @@ def showGame():
                 SCREEN.blit(PREYALIVE, (x, y))
             
         SCREEN.blit(SCORE,(800,870))
-        textScore_render = pygame.font.Font(FONT, 35).render(str(score), True, "White")
-        textScore_loc = textScore_render.get_rect(center=(880,850))
-        SCREEN.blit(textScore_render, textScore_loc)
+        textScoreRender = pygame.font.Font(FONT, 35).render(str(score), True, "White")
+        textScoreLoc = textScoreRender.get_rect(center=(880,850))
+        SCREEN.blit(textScoreRender, textScoreLoc)
         
         SCREEN.blit(SHOT,(85,870))
         bulletXPosition = 90
@@ -142,11 +138,11 @@ def showGame():
         SCREEN.blit(bulletsRender, bulletsLoc)
         
         for event in pygame.event.get():
-            if len(preyDefeatCount) == preyMaxCount and preyDefeatCount.count(True) >= winPreyCount:
+            if len(preyDefeatCount) == PREY_MAX_COUNT and preyDefeatCount.count(True) >= WIN_PREY_COUNT:
                 showResult(" You win! ", score, preyScore)
                 return 
                 
-            elif len(preyDefeatCount) == preyMaxCount and preyDefeatCount.count(True) < winPreyCount:
+            elif len(preyDefeatCount) == PREY_MAX_COUNT and preyDefeatCount.count(True) < WIN_PREY_COUNT:
                     showResult(" Oh no... You lose! ", score, preyScore)  
                     return 
                     
@@ -158,9 +154,9 @@ def showGame():
                     bulletsCount -= 1
                     
                     if killCollision:
-                        textScore_render = pygame.font.Font(FONT, 35).render(str(goose.killPrice), True, "White")
-                        textScore_loc = textScore_render.get_rect(center=(goose.x , goose.y ))
-                        SCREEN.blit(textScore_render, textScore_loc)
+                        textScoreRender = pygame.font.Font(FONT, 35).render(str(goose.killPrice), True, "White")
+                        textScoreLoc = textScoreRender.get_rect(center=(goose.x , goose.y ))
+                        SCREEN.blit(textScoreRender, textScoreLoc)
                                         
                         goose.alive = False
                         score += goose.killPrice
@@ -173,7 +169,7 @@ def showResult(text, score, preys):
     run = True
     textRender = pygame.font.Font(FONT, 45).render(text, True, "White")
     scoreRender = pygame.font.Font(FONT, 45).render("Score: " + str(score), True, "White")
-    prayRender = pygame.font.Font(FONT, 45).render("Ducks: " + str(preys) + " from "+ str(preyMaxCount), True, "White")
+    prayRender = pygame.font.Font(FONT, 45).render("Ducks: " + str(preys) + " from "+ str(PREY_MAX_COUNT), True, "White")
     
     text_loc = textRender.get_rect(center=(500, 200))
     score_loc = scoreRender.get_rect(center=(500, 250))
