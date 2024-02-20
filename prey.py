@@ -19,7 +19,6 @@ class Prey(GameChar):
         dying(): Animates the prey's death and falling down from the screen.
         flyAway(): Makes the prey fly away from the screen.
         start(): Makes the prey fly on its start point before hunting.
-        load_tileset(filename, width, height): Loads the tileset from the given file.
         draw(): Draws the prey on the screen based on direction.
         change_direction(): Changes the direction of the prey based on its velocity.
         move(): Moves the prey based on its velocity and changes velocity if it hits the screen bounds.
@@ -61,27 +60,6 @@ class Prey(GameChar):
         self.x += self.velocity[0]
         self.y += self.velocity[1]
         self.draw()
-
-    def load_tileset(self, filename, width, height):
-        """
-        Loads the tileset from the given file.
-        Args:
-            filename (str): The name of the image file to be loaded as a tileset.
-            width (int): The number of pixels across each tile in the tileset.
-            height (int): The number of pixels down each tile is in the tileset.
-        Returns:
-            list: A list of pygame Surface objects representing all the images in the tileset
-        """
-        image = pygame.image.load(filename).convert_alpha()
-        image_width, image_height = image.get_size()    
-        tileset = []
-        for tile_x in range(0, image_width // width):
-            line = []
-            tileset.append(line)
-            for tile_y in range(0, image_height // height):
-                rect = ( tile_x * width, tile_y * height, width, height)
-                line.append(image.subsurface(rect))
-        return tileset
     
     def draw(self):
         """

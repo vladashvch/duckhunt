@@ -1,16 +1,16 @@
 import pygame
 from random import choice
 from constants import SCREEN
-from object import Object
-class Hunter(Object):
+from gamechar import GameChar
+class Hunter(GameChar):
     animationFramerate = 12
     defaultX = 400
     defaultY = 590
     catchFrame = 0
     laughFrames = [1, 2]
     
-    def __init__(self, width, height, tileset):
-        super().__init__(self.defaultX, self.defaultY, width, height, None)
+    def __init__(self, x, y, width, height, tileset):
+        super().__init__(x, y, width, height, None)
         self.tileset = self.load_tileset(tileset, width, height)
         self.flipX = choice([True,False])
         self.frame = 0
@@ -35,19 +35,6 @@ class Hunter(Object):
         else:
             self.y -= self.velocity[1]  
         
-    def load_tileset(self, filename, width, height):
-        
-        image = pygame.image.load(filename).convert_alpha()
-        image_width, image_height = image.get_size()    
-        tileset = []
-        line = []  
-        for tile_x in range(0, image_width // width):
-            rect = (tile_x * width, 0, width, height) 
-            line.append(image.subsurface(rect)) 
-        tileset.append(line)  
-        return tileset
-  
-    
     def draw(self, state):
         if state == "catch":
             image = pygame.transform.scale(self.tileset[0][self.catchFrame], (self.width, self.height))

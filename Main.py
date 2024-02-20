@@ -34,7 +34,7 @@ for _ in range(preyMaxCount):
     goose = Prey(-50, randint(200, 550), 154, 145, "assets\goose_tileset.png")
     preyCount.append(goose)
 
-dog = Hunter(200, 150, "assets/dog_tileset.png")
+dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 150, "assets/dog_tileset.png")
 targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
 
 
