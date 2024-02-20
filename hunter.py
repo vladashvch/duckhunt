@@ -6,8 +6,10 @@ class Hunter(GameChar):
     animationFramerate = 12
     defaultX = 400
     defaultY = 590
+    reactionLine = 0
     catchFrame = 0
     laughFrames = [1, 2]
+
     
     def __init__(self, x, y, width, height, tileset):
         super().__init__(x, y, width, height, None)
@@ -37,15 +39,14 @@ class Hunter(GameChar):
         
     def draw(self, state):
         if state == "catch":
-            image = pygame.transform.scale(self.tileset[0][self.catchFrame], (self.width, self.height))
+            image = pygame.transform.scale(self.tileset[self.catchFrame][self.reactionLine], (self.width, self.height))
             SCREEN.blit(pygame.transform.flip(image, self.flipX, False), (self.x, self.y))
             
         if state == "laughing": 
             if self.frame >= len(self.laughFrames):
                 self.frame = 0
 
-            image_index = self.laughFrames[self.frame]  
-            image = pygame.transform.scale(self.tileset[0][image_index], (self.width, self.height))
+            image = pygame.transform.scale(self.tileset[self.laughFrames[self.frame]][self.reactionLine], (self.width, self.height))
             SCREEN.blit(pygame.transform.flip(image, self.flipX, False), (self.x, self.y))
 
             self.frame_timer += 1
