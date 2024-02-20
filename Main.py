@@ -44,7 +44,7 @@ for _ in range(PREY_MAX_COUNT):
     goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath)
     preyCount.append(goose)
 
-dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 150, dogTilesetPath)
+dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 293, dogTilesetPath,200)
 targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
 
 
@@ -78,7 +78,7 @@ def showGame():
                     if hunterStartTime is None:
                         hunterStartTime = time.time()
                 
-                    if time.time() - hunterStartTime >= 3:
+                    if time.time() - hunterStartTime >= 2:
                         preyCount.remove(goose)
                         preyDefeatCount.append(True)
                         prayFramesUpdating = 0
@@ -90,7 +90,7 @@ def showGame():
                 if hunterStartTime is None:
                     hunterStartTime = time.time()
                 
-                if time.time() - hunterStartTime >= 3:
+                if time.time() - hunterStartTime >= 2:
                     if goose.y < -goose.width or goose.x > WIDTH + goose.width:
                         preyCount.remove(goose)
                         preyDefeatCount.append(False)
@@ -118,23 +118,23 @@ def showGame():
         killCollision = checkKillCollision(goose, targetCursor, KILLRADIUS) 
         
         SCREEN.blit(HIT,(245,845))
-        blit_arguments = []
+        blitArguments = []
         preyXPosition = 370
         for _ in range(PREY_MAX_COUNT): 
-            blit_arguments.append((PREY, (preyXPosition, 850)))
+            blitArguments.append((PREY, (preyXPosition, 850)))
             SCREEN.blit(PREY, (preyXPosition, 850))
             preyXPosition += 30 
             
         for i, is_alive in enumerate(preyDefeatCount):
             if is_alive:  
 
-                x, y = blit_arguments[i][1]  
-                blit_arguments[i] = (PREYDEAD, (x, y)) 
+                x, y = blitArguments[i][1]  
+                blitArguments[i] = (PREYDEAD, (x, y)) 
                 SCREEN.blit(PREYDEAD, (x, y))
                 
             if not is_alive:  
-                x, y = blit_arguments[i][1]  
-                blit_arguments[i] = (PREYALIVE, (x, y)) 
+                x, y = blitArguments[i][1]  
+                blitArguments[i] = (PREYALIVE, (x, y)) 
                 SCREEN.blit(PREYALIVE, (x, y))
             
         SCREEN.blit(SCORE,(800,870))

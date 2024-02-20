@@ -9,30 +9,31 @@ class Hunter(GameChar):
     reactionLine = 0
     catchFrame = 0
     laughFrames = [1, 2]
-
+    heighPlus = 0
     
-    def __init__(self, x, y, width, height, tileset):
+    def __init__(self, x, y, width, height, tileset, heighPlus):
         super().__init__(x, y, width, height, None)
         self.tileset = self.load_tileset(tileset, width, height)
         self.flipX = choice([True,False])
         self.frame = 0
-        self.frame_timer = 0
+        self.frameTimer = 0
         self.velocity = [0, 0]
-        self.going_down = False
+        self.goingDown = False
+        self.heighPlus = heighPlus
         
     def update(self, state):
-        self.velocity[1] = 2
+        self.velocity[1] = 4
         self.draw(state)
         yTemp = self.y
 
-        if self.y <= (self.defaultY-100):
-            self.going_down = True 
+        if self.y <= (self.defaultY-self.heighPlus):
+            self.goingDown = True 
 
         elif self.y > yTemp:  
-            self.going_down = False
+            self.goingDown = False
+           
               
-
-        if self.going_down:
+        if self.goingDown:
             self.y += self.velocity[1]  
         else:
             self.y -= self.velocity[1]  
@@ -49,18 +50,19 @@ class Hunter(GameChar):
             image = pygame.transform.scale(self.tileset[self.laughFrames[self.frame]][self.reactionLine], (self.width, self.height))
             SCREEN.blit(pygame.transform.flip(image, self.flipX, False), (self.x, self.y))
 
-            self.frame_timer += 1
-            if self.frame_timer < self.animationFramerate:
+            self.frameTimer += 1
+            if self.frameTimer < self.animationFramerate:
                 return
             self.frame += 1
             if self.frame >= len(self.laughFrames):
                 self.frame = 0
-            self.frame_timer = 0  
+            self.frameTimer = 0  
                 
     def initialState(self):
         self.x = self.defaultX
         self.y = self.defaultY
         self.flipX = choice([True,False])
         self.frame = 0
-        self.frame_timer = 0
-        self.going_down = False
+        self.frameTimer = 0
+        self.goingDown = False
+        self.heighPlus = self.heighPlus
