@@ -46,7 +46,7 @@ class Prey(GameChar):
         self.direction = direction
         self.flipX = False
         self.frame = 0
-        self.frame_timer = 0
+        self.frameTimer = 0
         self.velocity = [0, 0]
         self.gooseFallChoice = choice([1,2])
         self.alive = True
@@ -71,16 +71,16 @@ class Prey(GameChar):
         self.change_direction()
         SCREEN.blit(pygame.transform.flip(image,  self.flipX, False), (self.x, self.y))
 
-        self.frame_timer += 1
+        self.frameTimer += 1
 
-        if self.frame_timer < CHARANIMATIONFPS:
+        if self.frameTimer < CHARANIMATIONFPS:
             return
         
         self.frame += 1
         if self.frame >= len(self.moveFrameOrder):
             self.frame = 0
 
-        self.frame_timer = 0
+        self.frameTimer = 0
 
     def change_direction(self):
         """
@@ -111,15 +111,15 @@ class Prey(GameChar):
             self.velocity = [randint(self.minVelocity, self.maxVelocity) * self.direction, randint(self.minVelocity, self.maxVelocity) * self.direction]
         # Changing the direction and x,y coordinate of the GameObj if the coordinate of left side is less..or right side coordinate is greater..
         if self.x <= BOUNDS_X[0] or self.x + self.width >= BOUNDS_X[1]:
-            self.move_direction = -1 if self.x + self.width >= BOUNDS_X[1] else 1
-            self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
-            self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+            self.moveDirection = -1 if self.x + self.width >= BOUNDS_X[1] else 1
+            self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.moveDirection
+            self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.moveDirection
         
         # Changing the direction and x,y coordinate of the GameObj if the coordinate of top side is less.. or bottom side coordinate is greater..
         if self.y <= BOUNDS_Y[0] or self.y + self.height >= BOUNDS_Y[1]:
-            self.move_direction = -1 if self.y + self.height >= BOUNDS_Y[1] else 1
-            self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
-            self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.move_direction
+            self.moveDirection = -1 if self.y + self.height >= BOUNDS_Y[1] else 1
+            self.velocity[0] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.moveDirection
+            self.velocity[1] = choice([0, randint(self.minVelocity, self.maxVelocity) ]) * self.moveDirection
 
     def dying(self):
         """
