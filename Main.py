@@ -5,6 +5,7 @@ from prey import Prey
 from hunter import Hunter
 from random import randint
 import time
+import argparse
 
 pygame.init()
 pygame.display.set_caption("DuckHunt")
@@ -22,15 +23,28 @@ FONT = "assets/VCR_OSD_MONO_1.001.ttf"
 CURSOR = pygame.image.load("assets/cursor.png")
 
 preyTimer = 0
-preyDefeatCount = []
-                            
-
+preyDefeatCount = []                          
 preyCount = []
+
+parser = argparse.ArgumentParser(description='Optional arguments for the script.')
+parser.add_argument('--red_goose', action='store_true', help='Use red goose tileset instead of the default one')
+parser.add_argument('--drone', action='store_true', help='Use drone tileset instead of the default one')
+args = parser.parse_args()
+
+preyTilesetPath = "assets/ordinar_goose_tileset.png"
+dogTilesetPath = "assets/dog_ordinar_goose_tileset.png"
+if args.red_goose:
+    preyTilesetPath = "assets/red_goose_tileset.png"
+    dogTilesetPath = "assets/dog_red_goose_tileset.png"
+elif args.drone:
+    preyTilesetPath = "assets/drone_tileset.png"
+    dogTilesetPath = "assets/dog_drone_tileset.png"   
+    
 for _ in range(PREY_MAX_COUNT):
-    goose = Prey(-50, randint(200, 550), 154, 145, "assets\goose_tileset.png")
+    goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath)
     preyCount.append(goose)
 
-dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 150, "assets/dog_tileset.png")
+dog = Hunter(Hunter.defaultX, Hunter.defaultY,200, 150, dogTilesetPath)
 targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
 
 
