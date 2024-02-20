@@ -2,17 +2,12 @@ import pygame
 from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH
 from gameobj import GameObj
 from prey import Prey
+from hunter import Hunter
 from random import randint
+import time
 
 pygame.init()
 pygame.display.set_caption("DuckHunt")
-
-preyTimer = 0
-preyCount = []
-preyDefeatCount = []
-preyMaxCount = 10
-winPreyCount = 8
-last_score = 0
 
 STARTBG = pygame.image.load("assets/startmenu.png")
 LAYERBG = pygame.image.load("assets/background.png")
@@ -26,11 +21,22 @@ SCORE =  pygame.image.load("assets/score.png")
 FONT = "assets/VCR_OSD_MONO_1.001.ttf"
 CURSOR = pygame.image.load("assets/cursor.png")
 
+preyTimer = 0
+preyDefeatCount = []
+preyMaxCount = 10
+winPreyCount = 8
+last_score = 0  
+   
                             
-targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
+
+preyCount = []
 for _ in range(preyMaxCount):
     goose = Prey(-50, randint(200, 550), 154, 145, "assets\goose_tileset.png")
     preyCount.append(goose)
+
+dog = Hunter(200, 150, "assets/dog_tileset.png")
+targetCursor = GameObj(0, 0, 50, 50, CURSOR) 
+
 
 def checkKillCollision(prey, targetCursor, radius):
     preyCenterX, preyCenterY = prey.getCenter()
@@ -45,35 +51,52 @@ def showGame():
     bulletsMaxCount = 3 
     score  = 0
     preyScore = 0  
-     
+    laughing_start_time = None
     while run:
         TIMER.tick(FPS)
         
-        # fill down layer of screen with color
         SCREEN.fill(pygame.Color('#3FBFFE'))
         
         if len(preyCount) > 0:
             goose = preyCount[0]
-            # update the goose's image based on its state
+
             if goose.alive == False:
                 goose.dying()
+
                 if goose.y > 700:
-                    preyCount.remove(goose)
-                    preyDefeatCount.append(True)
-                    prayFramesUpdating = 0
-            elif bulletsCount == 0 or prayFramesUpdating>=FPS * 5: #or 5 sec & goose.alive == True
+                    dog.update("catch")
+                    if laughing_start_time is None:
+                        laughing_start_time = time.time()
+                
+                    if time.time() - laughing_start_time >= 3:
+                        preyCount.remove(goose)
+                        preyDefeatCount.append(True)
+                        prayFramesUpdating = 0
+                        laughing_start_time = None
+                    
+            elif bulletsCount == 0 or prayFramesUpdating >= FPS * 5:  # or 5 sec & goose.alive == True
                 goose.flyAway()
-                if goose.y < -goose.width or goose.x > WIDTH + goose.width:
-                    preyCount.remove(goose)
-                    preyDefeatCount.append(False)
-                    bulletsCount = bulletsMaxCount
-                    prayFramesUpdating = 0  
+                dog.update("laughing")
+                if laughing_start_time is None:
+                    laughing_start_time = time.time()
+                
+                if time.time() - laughing_start_time >= 3:
+                    if goose.y < -goose.width or goose.x > WIDTH + goose.width:
+                        preyCount.remove(goose)
+                        preyDefeatCount.append(False)
+                        bulletsCount = bulletsMaxCount
+                        prayFramesUpdating = 0
+                        laughing_start_time = None 
+                               
             else:
                 if goose.x < 20:
                     goose.start()
+                    dog.initialState()
                 else:
                     goose.update()
                     prayFramesUpdating+=1
+                    
+                    
                     
         SCREEN.blit(LAYERBG,(0,0))
         
@@ -94,6 +117,7 @@ def showGame():
             
         for i, is_alive in enumerate(preyDefeatCount):
             if is_alive:  
+
                 x, y = blit_arguments[i][1]  
                 blit_arguments[i] = (PREYDEAD, (x, y)) 
                 SCREEN.blit(PREYDEAD, (x, y))
@@ -134,6 +158,10 @@ def showGame():
                     bulletsCount -= 1
                     
                     if killCollision:
+                        textScore_render = pygame.font.Font(FONT, 35).render(str(goose.killPrice), True, "White")
+                        textScore_loc = textScore_render.get_rect(center=(goose.x , goose.y ))
+                        SCREEN.blit(textScore_render, textScore_loc)
+                                        
                         goose.alive = False
                         score += goose.killPrice
                         preyScore += 1
