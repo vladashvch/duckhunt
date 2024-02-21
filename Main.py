@@ -231,9 +231,7 @@ def showResult(text, score, preys):
     
 def startMenu():
     """
-    This method is responsible for displaying the result of a certain operation or process.
-    It might be used to show the outcome of a game, the result of a calculation, or any other type of result.
-    The specific behavior of this method depends on the context in which it's used and the way it's implemented.
+    This method is responsible for launching the game. This is the starting point of the game from which the user will start the game.
     """
     run = True
     while run:  
