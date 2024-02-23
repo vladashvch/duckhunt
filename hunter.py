@@ -54,6 +54,7 @@ class Hunter(GameChar):
         self.velocity = [0, 0]
         self.goingDown = False
         self.heighPlus = heighPlus
+    
         
     def update(self, state):
         """
@@ -76,6 +77,7 @@ class Hunter(GameChar):
             self.y += self.velocity[1]  
         else:
             self.y -= self.velocity[1]
+    
         
     def draw(self, state):
         """
