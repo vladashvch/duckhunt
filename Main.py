@@ -50,6 +50,13 @@ targetCursor = GameObj(0, 0, 50, 50, CURSOR)
 
 
 def backgroundScreenBlit(image, x, y):
+    """
+    Blit the given image to the screen at the given coordinates.
+    Args:
+        image (object): The image to be blitted to the screen.
+        x (int): The x-coordinate of the image on the screen.
+        y (int): The y-coordinate of the image on the screen.
+    """
     SCREEN.blit(image, (x, y))
 
 
@@ -69,20 +76,34 @@ def checkKillCollision(prey, targetCursor, radius):
     return distance <= radius
 
 def cursor():
-    
+    """
+    Draw the target cursor on the screen at the current mouse position.
+    """
     mousePos = pygame.mouse.get_pos()
     targetCursor.draw() 
     targetCursor.x = mousePos[0] - targetCursor.width / 2
     targetCursor.y = mousePos[1] - targetCursor.height / 2
     
 def renderText(screen, font, text, size, color, position):
-    
+    """
+    Render the given text to the screen at the given position.
+    Args:
+        screen (object): The screen to which the text is rendered.
+        font (str): The font used to render the text.
+        text (str): The text to be rendered.
+        size (int): The size of the rendered text.
+        color (str): The color of the rendered text.
+        position (tuple): The position of the rendered text on the screen.
+    """
     rendered_text = pygame.font.Font(font, size).render(str(text), True, color)
     text_rect = rendered_text.get_rect(center=position)
     screen.blit(rendered_text, text_rect)
 
 def bulletsUI(bulletsCount): 
-       
+    """
+    Draw the bullets UI on the screen.
+    Args:
+        bulletsCount (int): The number of bullets to be displayed."""   
     backgroundScreenBlit(SHOT, 85, 870) 
     bulletXPosition = 90
     for _ in range(bulletsCount):
@@ -91,6 +112,13 @@ def bulletsUI(bulletsCount):
     renderText(SCREEN, FONT, "R = "+ str(bulletsCount), 25, "White", (135, 790))
 
 def preyUIUpgrade(blit_arguments, prey_defeat_count):
+    """
+    Changes the prey image for each prey in UI, based on whether it is dead or flew away.
+    Args:
+        blit_arguments (tuple): The arguments to be passed to the blit function.
+                                Contains the image and its position.
+        prey_defeat_count (list): A list containing the defeat count for each prey.
+    """
     for i, is_alive in enumerate(prey_defeat_count):
         x, y = blit_arguments[i][1]
         if is_alive:
@@ -100,6 +128,9 @@ def preyUIUpgrade(blit_arguments, prey_defeat_count):
         backgroundScreenBlit(blit_arguments[i][0], x, y)
  
 def preyUI():
+    """
+    Display prey image for each prey.
+    """
     blit_arguments = []
     preyXPosition = 370
     for _ in range(PREY_MAX_COUNT):
@@ -109,21 +140,33 @@ def preyUI():
         
     preyUIUpgrade(blit_arguments, preyDefeatCount)   
     
-def handle_user_events(bulletsMaxCount, checkKillCollision, bulletsCount, goose, targetCursor,  score, preyScore, preyDefeatCount, preyCount):
+def handle_user_events(bulletsMaxCount, checkKillCollision, bulletsCount, goose, targetCursor,  score, preyScore, preyDefeatCount):
     """
-    Handle user input events, such as quitting the game or shooting bullets.
+    Handle user input events, quitting the game or shooting bullets.
+    Args:
+        bulletsMaxCount (int) : The maximum number of bullets the player can shoot.
+        checkKillCollision (function) : A function that checks for a collision between the prey and the target cursor.
+        bulletsCount (int) : The current number of bullets the player can shoot,
+        goose (object) : The prey object,
+        targetCursor (object): The target cursor object,
+        score (int) : The player's score,
+        preyScore (int) : The number of prey the player has defeated,
+        preyDefeatCount (list): A list containing bools of the defeats and wins for each prey.   
+    Returns:
+        bulletsCount (int), score (int), preyScore (int),
+        bool: True if the player wants to quit the game, False otherwise.
     """
     for event in pygame.event.get():
         if len(preyDefeatCount) == PREY_MAX_COUNT and preyDefeatCount.count(True) >= WIN_PREY_COUNT:
             showResult(" You win! ", score, preyScore)
-            return False
+            return bulletsCount, score, preyScore, False
                 
         elif len(preyDefeatCount) == PREY_MAX_COUNT and preyDefeatCount.count(True) < WIN_PREY_COUNT:
             showResult(" Oh no... You lose! ", score, preyScore)
-            return False
+            return bulletsCount, score, preyScore, False
 
         elif event.type == pygame.QUIT:
-            return False
+            return bulletsCount, score, preyScore, False
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and bulletsCount >= 1:
             bulletsCount -= 1
@@ -133,14 +176,24 @@ def handle_user_events(bulletsMaxCount, checkKillCollision, bulletsCount, goose,
                 score += goose.killPrice
                 preyScore += 1
                 bulletsCount = bulletsMaxCount
-    return bulletsCount, score, True
+    return bulletsCount, score, preyScore, True
     
 def preyCounter(prayFramesUpdating, hunterStartTime, preyCount, preyDefeatCount, bulletsCount, bulletsMaxCount, goose, dog):
     """
     Counter for the prey.
-
     This function updates the prey state based on various conditions such as being shot, flying away, or being caught.
     It also updates the prey's movement and animation.
+    Args:
+        prayFramesUpdating (int): The number of frames that have passed since the prey was last updated.
+        hunterStartTime (float): The time at which the hunter started hunting the prey.
+        preyCount (list): A list of prey objects.
+        preyDefeatCount (list): A list containing bools of the defeats and wins for each prey.
+        bulletsCount (int): The current number of bullets the player can shoot.
+        bulletsMaxCount (int): The maximum number of bullets the player can shoot.
+        goose (object): The prey object.
+        dog (object): The dog object.
+    Returns:
+        prayFramesUpdating (int), hunterStartTime (float), bulletsCount (int)
     """
     if goose.alive == False:
         goose.dying()
@@ -184,7 +237,7 @@ def showGame():
     """
     Show the main game loop for the Duck Hunt game.
 
-    This function initializes the game variables, updates the game state, and handles user input.
+    Initializes the game variables, updates the game state, and handles user input.
     It displays the game screen, including the background, prey, score, bullets, and target cursor.
     The function also checks for collisions between the target cursor and the prey, and updates the score accordingly.
     The game loop continues until the player wins or loses the game, or chooses to quit.
@@ -217,19 +270,26 @@ def showGame():
         bulletsUI(bulletsCount)
         preyUI()
         
-        bulletsCount, score, run  = handle_user_events(bulletsMaxCount, checkKillCollision, bulletsCount, goose, targetCursor,  score, preyScore, preyDefeatCount, preyCount)
+        bulletsCount, score, preyScore, run  = handle_user_events(bulletsMaxCount, checkKillCollision, bulletsCount, goose, targetCursor,  score, preyScore, preyDefeatCount)
         pygame.display.flip()     
   
 
 
 def showResultText(text, score, preys):
+    """
+    Renders the result text on the screen
+    Args:
+        text (str): The text to be rendered.
+        score (int): The player's score.
+        preys (int): The number of prey the player has defeated.
+    """
     renderText(SCREEN, FONT, text, 45, "White", (500, 200))
     renderText(SCREEN, FONT, "Score: " + str(score), 45, "White", (500, 250))
     renderText(SCREEN, FONT, "Ducks: " + str(preys) + " from "+ str(PREY_MAX_COUNT), 45, "White", (500, 300))
             
 def showResultEvents():
     """
-    This function checks for events in the pygame event queue.
+    Checks for events in the pygame event queue.
     It returns False if the QUIT event is detected or if the left mouse button is clicked.
     Otherwise, it returns True.
     """
@@ -240,9 +300,11 @@ def showResultEvents():
 
 def showResult(text, score, preys):
     """
-    This method is responsible for displaying the result of a certain operation or process.
-    It might be used to show the outcome of a game, the result of a calculation, or any other type of result.
-    The specific behavior of this method depends on the context in which it's used and the way it's implemented.
+    Contains while loop for continuously showing the result of the game.
+    Args:
+        text (str): The text to be displayed at the beginning of the result.
+        score (int): The player's score.
+        preys (int): The number of prey the player has defeated.
     """
     run = True
  
@@ -252,11 +314,15 @@ def showResult(text, score, preys):
         showResultText(text, score, preys)
         run = showResultEvents()   
         pygame.display.flip()
-    pygame.quit()
 
 
     
 def startMenuEvents():
+    """
+    Starts game by clicking the left mouse button. Quit the game by clicking the close button.
+    Returns:
+        bool: True if the player wants to start the game, False if the player wants to quit the game.
+    """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -267,7 +333,7 @@ def startMenuEvents():
     
 def startMenu():
     """
-    This method is responsible for launching the game. This is the starting point of the game from which the user will start the game.
+    Responsible for launching the game. This is the starting point of the game from which the user will start the game.
     """
     run = True
     while run:  
