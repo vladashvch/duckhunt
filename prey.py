@@ -201,4 +201,4 @@ class Prey(GameChar):
         self.velocity = [8, -8]
         self.x += self.velocity[0]
         self.y += self.velocity[1]
-        self.draw()
+        self.draw()  # GameChar method
