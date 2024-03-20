@@ -18,7 +18,7 @@ jobs:
 
     - name: Run tests and create pytest report
       run: |
-        pytest tests --html=reports/pytest_report/report.html
+        pytest tests/ --html=reports/pytest_report/report.html
     
     - name: Create flake8 linter report
       run: |
