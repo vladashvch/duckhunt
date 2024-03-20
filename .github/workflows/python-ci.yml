@@ -9,10 +9,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v2
       with:
         python-version: '3.x'
 
@@ -23,7 +23,7 @@ jobs:
 
     - name: Run tests and create pytest report
       run: |
-        "pytest tests --html=reports/pytest_report/report.html"
+        pytest tests --html=reports/pytest_report/report.html
     
     - name: Create flake8 linter report
       run: |
