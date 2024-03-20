@@ -26,4 +26,4 @@ jobs:
 
     - name: Run tests and create pytest report
       run: |
-        pytest tests/ --html=reports/pytest_report/report.html
+        pytest tests/ --html=pytest_report.html
