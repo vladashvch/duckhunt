@@ -30,6 +30,6 @@ jobs:
     
     - name: Create flake8 linter report
       run: |
-        flake8 --format=html --htmldir=reports/flake-report \
+        flake8 --format=html --htmldir=reports/flake_report \
         --extend-ignore=.venv,.github,pycache,.pytest_cache,assets,html \
         --doctests --exclude=.venv,.github,pycache,.pytest_cache,assets,reports
