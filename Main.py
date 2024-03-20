@@ -1,5 +1,6 @@
+import os
 import pygame
-from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH, PREY_MAX_COUNT, WIN_PREY_COUNT
+from constants import TIMER, FPS, SCREEN, KILLRADIUS, WIDTH, PREY_MAX_COUNT, WIN_PREY_COUNT, ASSETS_PATH
 from gameobj import GameObj
 from prey import Prey
 from hunter import Hunter
@@ -10,17 +11,17 @@ import argparse
 pygame.init()
 pygame.display.set_caption("DuckHunt")
 
-STARTBG = pygame.image.load("assets/startmenu.png")
-LAYERBG = pygame.image.load("assets/background.png")
-HIT = pygame.image.load("assets/hit.png")
-PREYDEAD = pygame.image.load("assets/preydead.png")
-PREYALIVE = pygame.image.load("assets/preyalive.png")
-PREY = pygame.image.load("assets/prey.png")
-SHOT = pygame.image.load("assets/shot.png")
-BULLET = pygame.image.load("assets/bullet.png")
-SCORE =  pygame.image.load("assets/score.png")
-FONT = "assets/VCR_OSD_MONO_1.001.ttf"
-CURSOR = pygame.image.load("assets/cursor.png")
+STARTBG = pygame.image.load(os.path.join(ASSETS_PATH, "startmenu.png"))
+LAYERBG = pygame.image.load(os.path.join(ASSETS_PATH, "background.png"))
+HIT = pygame.image.load(os.path.join(ASSETS_PATH, "hit.png"))
+PREYDEAD = pygame.image.load(os.path.join(ASSETS_PATH, "preydead.png"))
+PREYALIVE = pygame.image.load(os.path.join(ASSETS_PATH, "preyalive.png"))
+PREY = pygame.image.load(os.path.join(ASSETS_PATH, "prey.png"))
+SHOT = pygame.image.load(os.path.join(ASSETS_PATH, "shot.png"))
+BULLET = pygame.image.load(os.path.join(ASSETS_PATH, "bullet.png"))
+SCORE = pygame.image.load(os.path.join(ASSETS_PATH, "score.png"))
+FONT = os.path.join(ASSETS_PATH, "VCR_OSD_MONO_1.001.ttf")
+CURSOR = pygame.image.load(os.path.join(ASSETS_PATH, "cursor.png"))
 
 
 preyTimer = 0
@@ -32,15 +33,15 @@ parser.add_argument('--red_goose', action='store_true', help='Use red goose tile
 parser.add_argument('--drone', action='store_true', help='Use drone tileset instead of the default one')
 args = parser.parse_args()
 
-preyTilesetPath = "assets/ordinar_goose_tileset.png"
-dogTilesetPath = "assets/dog_ordinar_goose_tileset.png"
+preyTilesetPath = os.path.join(ASSETS_PATH, "ordinar_goose_tileset.png")
+dogTilesetPath = os.path.join(ASSETS_PATH, "dog_ordinar_goose_tileset.png")
 if args.red_goose:
-    preyTilesetPath = "assets/red_goose_tileset.png"
-    dogTilesetPath = "assets/dog_red_goose_tileset.png"
+    preyTilesetPath = os.path.join(ASSETS_PATH, "red_goose_tileset.png")
+    dogTilesetPath = os.path.join(ASSETS_PATH, "dog_red_goose_tileset.png")
 elif args.drone:
-    preyTilesetPath = "assets/drone_tileset.png"
-    dogTilesetPath = "assets/dog_drone_tileset.png"   
-    
+    preyTilesetPath = os.path.join(ASSETS_PATH, "drone_tileset.png")
+    dogTilesetPath = os.path.join(ASSETS_PATH, "dog_drone_tileset.png")
+
 for _ in range(PREY_MAX_COUNT):
     goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath, 100)
     preyCount.append(goose)
