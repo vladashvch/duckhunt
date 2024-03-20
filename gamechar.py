@@ -24,7 +24,7 @@ class GameChar(ABC, GameObj):
     @abstractmethod
     def draw(self):
         """
-        Draws the game character on the screen. Rescaling image to object's 
+        Draws the game character on the screen. Rescaling image to object's
         width and height. And flips
         """
 
@@ -49,7 +49,7 @@ class GameChar(ABC, GameObj):
             in the tileset
         """
         image = pygame.image.load(filename).convert_alpha()
-        image_width, image_height = image.get_size()    
+        image_width, image_height = image.get_size()
         tileset = []
         for tile_x in range(0, image_width // width):
             line = []
