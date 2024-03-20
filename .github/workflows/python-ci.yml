@@ -24,6 +24,10 @@ jobs:
         pip install pygame
         pip install numpy
 
-    - name: Run tests and create pytest report
+    - name: Run tests
       run: |
-        pytest tests/ --html=pytest_report.html
+        pytest
+
+    - name: Run linter
+      run: |
+        flake8
