@@ -30,7 +30,7 @@ jobs:
     
     - name: Create flake8 linter report
       run: |
-        mkdir -p reports/flake_report  # Create directory if not exists
+        mkdir -p reports/flake_report
         flake8 --format=html --extend-ignore=.venv,.github,pycache,.pytest_cache,assets,html --doctests --exclude=.venv,.github,pycache,.pytest_cache,assets,reports > reports/flake_report/flake_report.html
   
     - name: Upload flake8 HTML report
