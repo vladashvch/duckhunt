@@ -2,8 +2,6 @@ name: Python CI
 
 on:
   push:
-    branches:
-      - '*'
 
 jobs:
   test:
@@ -11,24 +9,21 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v2
       with:
         python-version: '3.x'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install pytest pytest-html 
+        pip install flake8
+        pip install pygame
+        pip install numpy
 
-    - name: Run tests and create pytest report
+    - name: Run tests
       run: |
-        "pytest tests --html=reports/pytest_report/report.html"
-    
-    - name: Create flake8 linter report
-      run: |
-        flake8 --format=html --htmldir=reports/flake-report \
-        --extend-ignore=.venv,.github,pycache,.pytest_cache,assets,html \
-        --doctests --exclude=.venv,.github,pycache,.pytest_cache,assets,reports
+        pytest
