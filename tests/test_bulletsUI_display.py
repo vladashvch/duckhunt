@@ -6,7 +6,7 @@ from unittest.mock import patch
 @pytest.mark.parametrize(
     "bulletsCount", [0, 1, 5, 10])
 def test_bulletsUI_display(bulletsCount):
-    with patch("main.renderText") as mocked_renderText:
+    with patch("Main.renderText") as mocked_renderText:
 
         bulletsUI(bulletsCount)
         expected_text = "R = " + str(bulletsCount)
