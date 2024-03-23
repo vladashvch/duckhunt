@@ -8,15 +8,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v2.3.0
+        uses: actions/setup-python@v2
         with:
           python-version: "3.x"
 
       - name: Checkout PyTorch
         uses: actions/checkout@master
+
+
       - name: Install flake8
         run: pip install flake8
       - name: Run flake8
@@ -26,6 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
       - name: Automatic requirements.txt for Python Project
         uses: ryan-rozario/pipreqs-action@master
 
@@ -34,13 +37,7 @@ jobs:
           PROJECT_PATH: project_folder #default is the root of the repository
           REQUIREMENT_PATH: project_folder/requirements.txt #default is requirement.txt in the root of your repository
 
-      - name: Run pytest
-        uses: pavelzw/pytest-action@v2
-        with:
-          run: pip install pytest
-          verbose: true
-          emoji: true
-          job-summary: true
-          custom-arguments: "-q"
-          click-to-expand: true
-          report-title: "Test Report"
+
+      - name: Run tests
+        run: |
+          pytest
