@@ -37,6 +37,7 @@ jobs:
       - name: Run pytest
         uses: pavelzw/pytest-action@v2
         with:
+          run: pip install pytest
           verbose: true
           emoji: true
           job-summary: true
