@@ -38,10 +38,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-html pytest-md pytest-emoji
+          pip install pytest pytest-html pytest-cov
           pip install pygame
           pip install numpy
 
-      - name: Run pytest
+      - name: Build coverage file
         run: |
-          pytest
+          pytest --cache-clear --cov=app test/ > pytest-coverage.txt
+      - name: Comment coverage
+       git add .
+       git commit -m uses: coroo/pytest-coverage-commentator@v1.0.2
