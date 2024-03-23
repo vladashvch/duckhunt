@@ -43,20 +43,20 @@ def mock_cursor_object():
 
 @pytest.mark.parametrize(
     "bulletsMaxCount, bulletsCount, score, preyScore, "
-    "preyDefeatCount, expected_result",
+    "preyDefeatCount",
     [
-        (0, 20, 200, 9, [True] * PREY_MAX_COUNT, True),
-        (0, 20, 200, 2, [True] * PREY_MAX_COUNT, True),
-        (0, 20, 200, 8, [True] * PREY_MAX_COUNT, True),
-        (0, 20, 200, 10, [True] * PREY_MAX_COUNT, True),
-        (0, 20, 200, 5, [True] * PREY_MAX_COUNT, True),
-        (0, 20, 200, 7, [True] * PREY_MAX_COUNT, True),
+        (0, 20, 200, 9, [True] * PREY_MAX_COUNT),
+        (0, 20, 200, 2, [True] * PREY_MAX_COUNT),
+        (0, 20, 200, 8, [True] * PREY_MAX_COUNT),
+        (0, 20, 200, 10, [True] * PREY_MAX_COUNT),
+        (0, 20, 200, 5, [True] * PREY_MAX_COUNT),
+        (0, 20, 200, 7, [True] * PREY_MAX_COUNT),
     ]
 )
 def test_handle_user_events_win(mock_pygame_event_quit,
                                 mock_prey_objects, mock_cursor_object,
                                 bulletsMaxCount, bulletsCount, score,
-                                preyScore, preyDefeatCount, expected_result):
+                                preyScore, preyDefeatCount):
     handle_user_events(bulletsMaxCount, 20, bulletsCount,
                        mock_prey_objects[0], mock_cursor_object,
                        score, preyScore, preyDefeatCount)
