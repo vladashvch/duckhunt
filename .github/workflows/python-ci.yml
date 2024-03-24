@@ -8,44 +8,33 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: "3.x"
-
-      - name: Checkout PyTorch
-        uses: actions/checkout@master
-
-      - name: Install flake8
-        run: pip install flake8
-      - name: Run flake8
-        uses: suo/flake8-github-action@releases/v1
-        with:
-          checkName: "flake8_py3" # NOTE: this needs to be the same as the job name
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Automatic requirements.txt for Python Project
-        uses: ryan-rozario/pipreqs-action@master
-
-        # Put an example of mandatory inputs here
-        with:
-          PROJECT_PATH: project_folder #default is the root of the repository
-          REQUIREMENT_PATH: project_folder/requirements.txt #default is requirement.txt in the root of your repository
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-html pytest-md pytest-emoji
-          pip install pygame
-          pip install numpy
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run pytest
-        uses: pavelzw/pytest-action@v2
+      - uses: actions/checkout@v3
+        if: success() || failure()
+      - run: |
+          cd tests
+          mkdir -p reports
+          pytest --browser=chrome --html=reports/reports.html
+          chmod 777  /home/runner/work/python-se/python-se/tests/reports/
+
+      - name: Set output
+        if: success() || failure()
+        id: results
+        run: echo "artifactPath=tests/reports/" >> $GITHUB_OUTPUT
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
         with:
-          emoji: true
-          job-summary: true
-          click-to-expand: true
-          report-title: "Test Report"
+          name: test-report
+          path: ${{ steps.results.outputs.artifactPath }}
