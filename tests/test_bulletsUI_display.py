@@ -1,7 +1,7 @@
-import pytest
-from Main import bulletsUI, SCREEN, FONT
-from unittest.mock import patch
-
+# import pytest
+# from Main import bulletsUI
+# from unittest.mock import patch
+# import os
 
 # @pytest.mark.parametrize(
 #     "bulletsCount", [0, 1, 5, 10])
