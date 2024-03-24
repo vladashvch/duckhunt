@@ -26,6 +26,7 @@ jobs:
           cd tests
           mkdir -p reports
           pytest --html=reports/reports.html
+          chmod 777  /home/runner/work/python-se/python-se/tests/reports/
 
       - name: Set output
         if: success() || failure()
