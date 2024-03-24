@@ -96,10 +96,10 @@ class Prey(GameChar):
         """
         self.flipX = False
         if self.velocity[0] >= 0 and not \
-                (0 <= self.velocity[1] <= self.minVelocity+1):  # ↑↓ →→
+                (0 <= self.velocity[1] <= self.minVelocity+1):  # →→ ↑↓
             self.direction = self.upFlyRow
         elif self.velocity[0] <= 0 and not \
-                (0 <= self.velocity[1] <= self.minVelocity+1):  # ↑↓ ←←
+                (0 <= self.velocity[1] <= self.minVelocity+1):  # ←← ↑↓
             self.direction = self.upFlyRow
             self.flipX = True
         elif self.velocity[0] < 0:  # ←
