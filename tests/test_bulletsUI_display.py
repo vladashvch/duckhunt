@@ -16,3 +16,4 @@
 
 #         assert args[0:] == (SCREEN, FONT, expected_text,
 #                             25, "White", (135, 790))
+#
