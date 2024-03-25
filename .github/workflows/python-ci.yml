@@ -38,3 +38,12 @@ jobs:
         with:
           name: test-report
           path: ${{ steps.results.outputs.artifactPath }}
+
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        uses: suo/flake8-github-action@releases/v1
+        with:
+          checkName: "test"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
