@@ -25,3 +25,4 @@ def game_obj(request):
 def test_getCenter(game_obj, expected_center):
     center = game_obj.getCenter()
     assert center == expected_center
+    
