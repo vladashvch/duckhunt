@@ -25,7 +25,7 @@ jobs:
       - run: |
           cd tests
           mkdir -p reports
-          pytest --html=reports/reports.html
+          pytest --html=reports/pytest_report/reports.html
           flake8 --format=html --htmldir=reports/flake_report --extend-ignore=venv,venv.Lib,.github,pycache,.pytest_cache,assets,html --doctests --exclude=.venv,.github,pycache,.pytest_cache,assets,reports.html
 
       - name: Set output
