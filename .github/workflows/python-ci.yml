@@ -26,7 +26,8 @@ jobs:
           cd tests
           mkdir -p reports
           pytest --html=reports/reports.html
-        
+          flake8 --format=html --htmldir=reports/flake_report --extend-ignore=venv,venv.Lib,.github,pycache,.pytest_cache,assets,html --doctests --exclude=.venv,.github,pycache,.pytest_cache,assets,reports.html
+
       - name: Set output
         if: success() || failure()
         id: results
@@ -37,12 +38,3 @@ jobs:
         with:
           name: test-report
           path: ${{ steps.results.outputs.artifactPath }}
-
-      - name: Install flake8
-        run: pip install flake8
-      - name: Run flake8
-        uses: suo/flake8-github-action@releases/v1
-        with:
-          checkName: "test"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
