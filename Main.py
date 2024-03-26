@@ -116,7 +116,8 @@ def bulletsUI(bulletsCount):
     """
     Draw the bullets UI on the screen.
     Args:
-        bulletsCount (int): The number of bullets to be displayed."""
+        bulletsCount (int): The number of bullets to be displayed.
+    """
     backgroundScreenBlit(SHOT, 85, 870)
     bulletXPosition = 90
     for _ in range(bulletsCount):

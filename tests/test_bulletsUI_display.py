@@ -1,18 +1,21 @@
 import pytest
 from Main import bulletsUI, SCREEN, FONT
-from unittest.mock import patch
 
 
-@pytest.mark.parametrize(
-    "bulletsCount", [0, 1, 5, 10])
-def test_bulletsUI_display(bulletsCount):
-    with patch("Main.renderText") as mocked_renderText:
+@pytest.mark.parametrize("bulletsCount", [0, 1, 5, 10])
+def test_bulletsUI(bulletsCount, monkeypatch):
 
-        bulletsUI(bulletsCount)
-        expected_text = "R = " + str(bulletsCount)
+    def mock_renderText(screen, font, text, size, color, position):
+        mock_renderText.called = True
+        mock_renderText.args = (screen, font, text, size, color, position)
 
-        mocked_renderText.assert_called_once()
-        args, _ = mocked_renderText.call_args
+    mock_renderText.called = False
 
-        assert args[0:] == (SCREEN, FONT, expected_text,
-                            25, "White", (135, 790))
+    monkeypatch.setattr("Main.renderText", mock_renderText)
+
+    bulletsUI(bulletsCount)
+
+    expected_text = "R = " + str(bulletsCount)
+    assert mock_renderText.called
+    args = mock_renderText.args
+    assert args[0:] == (SCREEN, FONT, expected_text, 25, "White", (135, 790))
