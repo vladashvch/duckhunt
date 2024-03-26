@@ -21,30 +21,40 @@ preyTimer = 0
 preyDefeatCount = []
 preyCount = []
 
-parser = argparse.ArgumentParser(
-    description='Optional arguments for the script.')
-parser.add_argument('--red_goose', action='store_true',
-                    help='Use red goose tileset instead of the default one')
-parser.add_argument('--drone', action='store_true',
-                    help='Use drone tileset instead of the default one')
-args = parser.parse_args()
 
-preyTilesetPath = os.path.join(ASSETS_PATH, "ordinar_goose_tileset.png")
-dogTilesetPath = os.path.join(ASSETS_PATH, "dog_ordinar_goose_tileset.png")
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Optional arguments for the script.')
+    parser.add_argument(
+        '--red_goose', action='store_true',
+        help='Use red goose tileset instead of the default one')
+    parser.add_argument(
+        '--drone', action='store_true',
+        help='Use drone tileset instead of the default one')
+    return parser.parse_args()
 
-if args.red_goose:
-    preyTilesetPath = os.path.join(ASSETS_PATH, "red_goose_tileset.png")
-    dogTilesetPath = os.path.join(ASSETS_PATH, "dog_red_goose_tileset.png")
-elif args.drone:
-    preyTilesetPath = os.path.join(ASSETS_PATH, "drone_tileset.png")
-    dogTilesetPath = os.path.join(ASSETS_PATH, "dog_drone_tileset.png")
 
-for _ in range(PREY_MAX_COUNT):
-    goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath, 100)
-    preyCount.append(goose)
+def main():
+    args = parse_args()
 
-dog = Hunter(Hunter.defaultX, Hunter.defaultY, 200, 293, dogTilesetPath, 200)
-targetCursor = GameObj(0, 0, 50, 50, CURSOR)
+    preyTilesetPath = os.path.join(ASSETS_PATH, "ordinar_goose_tileset.png")
+    dogTilesetPath = os.path.join(ASSETS_PATH, "dog_ordinar_goose_tileset.png")
+
+    if args.red_goose:
+        preyTilesetPath = os.path.join(ASSETS_PATH, "red_goose_tileset.png")
+        dogTilesetPath = os.path.join(ASSETS_PATH, "dog_red_goose_tileset.png")
+    elif args.drone:
+        preyTilesetPath = os.path.join(ASSETS_PATH, "drone_tileset.png")
+        dogTilesetPath = os.path.join(ASSETS_PATH, "dog_drone_tileset.png")
+
+    for _ in range(PREY_MAX_COUNT):
+        goose = Prey(-50, randint(200, 550), 154, 145, preyTilesetPath, 100)
+        preyCount.append(goose)
+
+    dog = Hunter(Hunter.defaultX, Hunter.defaultY, 200, 293,
+                 dogTilesetPath, 200)
+    targetCursor = GameObj(0, 0, 50, 50, CURSOR)
+    return dog, targetCursor
 
 
 def backgroundScreenBlit(image, x, y):
@@ -395,4 +405,5 @@ def startMenu():
 
 
 if __name__ == "__main__":
+    dog, targetCursor = main()
     startMenu()
