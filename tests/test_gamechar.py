@@ -1,14 +1,5 @@
-import os
 import pygame
 import pytest
-from constants import ASSETS_PATH
-from prey import Prey
-
-
-@pytest.fixture
-def game_char():
-    preyTilesetPath = os.path.join(ASSETS_PATH, "ordinar_goose_tileset.png")
-    return Prey(0, 0, 10, 10, preyTilesetPath, 100)
 
 
 @pytest.mark.parametrize(
@@ -22,14 +13,14 @@ def game_char():
         ([0, 1, 2, 1], 15, 0, 15, 1),
     ],
 )
-def test_frameTimerMethod(game_char, frameList, expected_frame, frame,
+def test_frameTimerMethod(prey_fixture, frameList, expected_frame, frame,
                           frameTimer, expected_frameTimer):
-    game_char.frameTimer = frameTimer
-    game_char.frame = frame
-    game_char.frameTimerMethod(frameList)
+    prey_fixture.frameTimer = frameTimer
+    prey_fixture.frame = frame
+    prey_fixture.frameTimerMethod(frameList)
 
-    assert game_char.frame == expected_frame and \
-        game_char.frameTimer == expected_frameTimer
+    assert prey_fixture.frame == expected_frame and \
+        prey_fixture.frameTimer == expected_frameTimer
 
 
 @pytest.mark.parametrize(
@@ -46,13 +37,13 @@ def test_frameTimerMethod(game_char, frameList, expected_frame, frame,
         (8, 4, 1, 1, 8),  # 8 columns and 4 rows; tileset[column][row]
     ],
 )
-def test_load_tileset(monkeypatch, game_char, tileset_width, tileset_height,
+def test_load_tileset(monkeypatch, prey_fixture, tileset_width, tileset_height,
                       tile_width, tile_height, expected_tileset_len):
     mock_image = pygame.Surface((tileset_width, tileset_height))
 
     monkeypatch.setattr(pygame.image, 'load', lambda _: mock_image)
 
-    tileset = game_char.load_tileset(
+    tileset = prey_fixture.load_tileset(
         'mocked_filename', tile_width, tile_height)
 
     assert isinstance(tileset, list) and \
