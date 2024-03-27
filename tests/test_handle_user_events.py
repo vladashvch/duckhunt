@@ -1,7 +1,7 @@
 import pygame
 import pytest
 from Main import handle_user_events
-from constants import PREY_MAX_COUNT, WIN_PREY_COUNT
+from constants import PREY_MAX_COUNT, WIN_PREY_COUNT, PREY_ORIGINAL, CURSOR
 from prey import Prey
 from gameobj import GameObj
 from random import randint
@@ -26,17 +26,15 @@ def mock_pygame_event_quit(monkeypatch):
 @pytest.fixture
 def mock_prey_objects():
     prey_objects = []
-    preyTilesetPath = "assets/ordinar_goose_tileset.png"
     for _ in range(PREY_MAX_COUNT):
         prey_object = Prey(-50, randint(200, 550),
-                           154, 145, preyTilesetPath, 100)
+                           154, 145, PREY_ORIGINAL, 100)
         prey_objects.append(prey_object)
     return prey_objects
 
 
 @pytest.fixture
 def mock_cursor_object():
-    CURSOR = pygame.image.load("assets/cursor.png")
     targetCursor = GameObj(0, 0, 50, 50, CURSOR)
     return targetCursor
 

@@ -4,7 +4,7 @@ from constants import (
     TIMER, FPS, SCREEN, KILLRADIUS, WIDTH, PREY_MAX_COUNT,
     WIN_PREY_COUNT, ASSETS_PATH, STARTBG, LAYERBG, HIT,
     PREYDEAD, PREYALIVE, PREY, SHOT, BULLET, SCORE,
-    FONT, CURSOR
+    FONT, CURSOR, PREY_ORIGINAL, HUNTER_ORIGINAL
 )
 from gameobj import GameObj
 from prey import Prey
@@ -37,8 +37,8 @@ def parse_args():
 def main():
     args = parse_args()
 
-    preyTilesetPath = os.path.join(ASSETS_PATH, "ordinar_goose_tileset.png")
-    dogTilesetPath = os.path.join(ASSETS_PATH, "dog_ordinar_goose_tileset.png")
+    preyTilesetPath = PREY_ORIGINAL
+    dogTilesetPath = HUNTER_ORIGINAL
 
     if args.red_goose:
         preyTilesetPath = os.path.join(ASSETS_PATH, "red_goose_tileset.png")
