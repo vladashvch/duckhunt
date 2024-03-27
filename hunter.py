@@ -105,7 +105,7 @@ class Hunter(GameChar):
             SCREEN.blit(pygame.transform.flip(
                 image, self.flipX, False), (self.x, self.y))
 
-        if self.state  == "laughing":
+        if self.state == "laughing":
             if self.frame >= len(self.laughFrames):
                 self.frame = 0
 

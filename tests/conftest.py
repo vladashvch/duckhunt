@@ -1,4 +1,3 @@
-import os
 import pytest
 from constants import PREY_ORIGINAL
 from prey import Prey

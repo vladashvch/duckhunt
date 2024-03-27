@@ -6,7 +6,8 @@ from prey import Prey
 from gameobj import GameObj
 from random import randint
 
-#----------bulletsUI----------
+
+# ----------bulletsUI----------
 @pytest.mark.parametrize("bulletsCount", [0, 1, 5, 10])
 def test_bulletsUI(bulletsCount, monkeypatch):
 
@@ -26,7 +27,7 @@ def test_bulletsUI(bulletsCount, monkeypatch):
     assert args[0:] == (SCREEN, FONT, expected_text, 25, "White", (135, 790))
 
 
-#----------handle_user_events----------
+# ----------handle_user_events----------
 class MockEvent:
     def __init__(self, type, button=None):
         self.type = type
