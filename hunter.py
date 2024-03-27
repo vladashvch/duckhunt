@@ -68,6 +68,7 @@ class Hunter(GameChar):
         self.velocity = [0, 0]
         self.goingDown = False
         self.heighPlus = heighPlus
+        self.state = None
 
     def update(self, state):
         """
@@ -75,13 +76,13 @@ class Hunter(GameChar):
         Args:
             state: The current state of the game.
         """
+        self.state = state
         self.velocity[1] = 4
-        self.draw(state)
+        self.draw()
         yTemp = self.y
 
         if self.y <= (self.defaultY-self.heighPlus):
             self.goingDown = True
-
         elif self.y > yTemp:
             self.goingDown = False
 
@@ -90,21 +91,21 @@ class Hunter(GameChar):
         else:
             self.y -= self.velocity[1]
 
-    def draw(self, state):
+    def draw(self):
         """
         Draw the hunter on the screen based on the given state.
         Parameters:
         state (str): The state of the hunter.
         It can be "catch" or "laughing".
         """
-        if state == "catch":
+        if self.state == "catch":
             image = pygame.transform.scale(
                 self.tileset[self.catchFrame][self.reactionLine],
                 (self.width, self.height))
             SCREEN.blit(pygame.transform.flip(
                 image, self.flipX, False), (self.x, self.y))
 
-        if state == "laughing":
+        if self.state  == "laughing":
             if self.frame >= len(self.laughFrames):
                 self.frame = 0
 
